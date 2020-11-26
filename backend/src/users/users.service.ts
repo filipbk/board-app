@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { Provider } from '../auth/provider';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,7 @@ export class UsersService {
 
   async getUser(_id: number): Promise<User | undefined> {
     return this.usersRepository.findOne({
-      select: ['login', 'firstName', 'lastName', 'email'],
+      select: ['id', 'firstName', 'lastName', 'email'],
       where: [{ id: _id }],
     });
   }
@@ -36,5 +37,24 @@ export class UsersService {
     await this.usersRepository.insert(user);
 
     return user;
+  }
+
+  findOneByThirdPartyId(
+    thirdPartyId: string,
+    provider: Provider,
+  ): Promise<User | undefined> {
+    return this.usersRepository.findByThirdPartyIdAndProvider(
+      thirdPartyId,
+      provider,
+    );
+  }
+
+  registerOAuthUser(
+    thirdPartyId: string,
+    provider: Provider,
+    email: string,
+  ): Promise<User> {
+    const user = new User(thirdPartyId, provider, email);
+    return this.usersRepository.save(user);
   }
 }
