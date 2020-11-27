@@ -14,43 +14,29 @@ services:
     networks:
       - app
 
-  adminer:
-    image: adminer:4.7.6
-    environment:
-      ADMINER_DEFAULT_SERVER: mysql_db_container
-    ports:
-      - 8080:8080
-    networks:
-      - app
-
   api:
     build:
       context: api
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     env_file:
       - api/.env
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     ports:
       - '3000:3000'
-    volumes:
-      - ./api:/app
     networks:
       - app
 
   dashboard:
     build:
       context: frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     env_file:
       - frontend/.env
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     ports:
-      - '80:3000'
-    volumes:
-      - ./frontend:/app
-    stdin_open: true
+      - '80:80'
 
 volumes:
   db_volume:
