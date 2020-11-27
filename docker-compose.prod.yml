@@ -19,9 +19,10 @@ services:
       context: backend
       dockerfile: Dockerfile.prod
     env_file:
-      - backend/.env
+      - backend/production.env
     environment:
       - NODE_ENV=production
+      - IGNORE_ENV_FILE=false
     ports:
       - '3000:3000'
     networks:

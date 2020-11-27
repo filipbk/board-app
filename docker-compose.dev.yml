@@ -17,7 +17,7 @@ services:
   adminer:
     image: adminer:4.7.6
     environment:
-      ADMINER_DEFAULT_SERVER: mysql_db_container
+      ADMINER_DEFAULT_SERVER: mysql
     ports:
       - 8080:8080
     networks:
@@ -28,9 +28,10 @@ services:
       context: backend
       dockerfile: Dockerfile.dev
     env_file:
-      - backend/.env
+      - backend/development.env
     environment:
       - NODE_ENV=development
+      - IGNORE_ENV_FILE=false
     ports:
       - '3000:3000'
     volumes:
