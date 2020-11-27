@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import Joi = require('@hapi/joi');
+import * as Joi from '@hapi/joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';

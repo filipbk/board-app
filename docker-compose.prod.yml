@@ -22,6 +22,7 @@ services:
       - backend/production.env
     environment:
       - NODE_ENV=production
+      - IGNORE_ENV_FILE=false
     ports:
       - '3000:3000'
     networks:
