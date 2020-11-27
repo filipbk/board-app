@@ -37,7 +37,11 @@ class AppHeader extends React.Component {
     } else {
       menuItems = [
         <Menu.Item key='/auth/google'>
-          <Button type='link' onClick={this.redirectToGoogleAuth} className='logout-btn'>
+          <Button
+            type='link'
+            onClick={this.redirectToGoogleAuth}
+            className='logout-btn'
+          >
             Log in
           </Button>
         </Menu.Item>,
@@ -68,11 +72,14 @@ class AppHeader extends React.Component {
   }
 
   redirectToGoogleAuth() {
-    fetch('auth/google', {
-      crossDomain:true,
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    // Not sure if its the best way to perform a redirect, but it works
+    window.location.assign(`${process.env.REACT_APP_API_URL}/auth/google`);
+    //  EXAMPLE FOR DOCKER ENVIRONMENT FIX
+    //   fetch(`${process.env.REACT_APP_API_URL}/users/1`, {
+    //     crossDomain: true
+    //   })
+    //     .then((res) => console.log(res))
+    //     .catch((err) => console.log(err));
   }
 }
 
