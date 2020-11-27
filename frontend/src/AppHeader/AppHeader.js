@@ -36,8 +36,10 @@ class AppHeader extends React.Component {
       ];
     } else {
       menuItems = [
-        <Menu.Item key='/login'>
-          <Link to='/login'>Log in</Link>
+        <Menu.Item key='/auth/google'>
+          <Button type='link' onClick={this.redirectToGoogleAuth} className='logout-btn'>
+            Log in
+          </Button>
         </Menu.Item>,
         <Menu.Item key='/signup'>
           <Link to='/signup'>Signup</Link>
@@ -63,6 +65,14 @@ class AppHeader extends React.Component {
 
   logout() {
     authenticationService.logout();
+  }
+
+  redirectToGoogleAuth() {
+    fetch('auth/google', {
+      crossDomain:true,
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   }
 }
 
