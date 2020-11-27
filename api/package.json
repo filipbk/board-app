@@ -1,5 +1,5 @@
 {
-  "name": "board-app",
+  "name": "board-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -68,8 +68,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,html,css}": [
-      "npm run lint",
-      "npm run format"
+      "eslint --fix",
+      "prettier --write"
     ]
   }
 }

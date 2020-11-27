@@ -1,5 +1,5 @@
 {
-  "name": "board-app",
+  "name": "board-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
