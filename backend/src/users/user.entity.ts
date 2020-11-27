@@ -32,9 +32,11 @@ export class User extends BaseEntity {
   @Column()
   provider: Provider;
 
-  @Column()
-  enabled = false;
+  @Exclude()
+  @Column({ default: false })
+  enabled!: boolean;
 
+  @Exclude()
   @Column({ type: 'simple-array' })
-  roles: Role[] = [Role.USER];
+  roles!: Role[];
 }

@@ -7,10 +7,16 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
+  private readonly jwtSecret: string;
+  private readonly jwtExpirationTime: number;
+
   constructor(
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.jwtSecret = this.configService.get('JWT_SECRET_KEY')!;
+    this.jwtExpirationTime = this.configService.get('JWT_EXPIRATION_TIME')!;
+  }
 
   async loginWithOauth(
     thirdPartyId: string,
@@ -36,6 +42,8 @@ export class AuthService {
       email,
       user.enabled,
       user.roles,
+      user.firstName,
+      user.lastName,
     );
   }
 
@@ -57,21 +65,21 @@ export class AuthService {
     email: string,
     enabled: boolean,
     roles: Role[],
+    firstName?: string,
+    lastName?: string,
   ): string {
     const payload = {
       thirdPartyId,
       provider,
       email,
+      firstName,
+      lastName,
       enabled,
       roles,
     };
 
-    const jwtSecret = this.configService.get('JWT_SECRET_KEY');
-    console.log({ jwtSecret });
-    const jwtExpirationTime = this.configService.get('JWT_EXPIRATION_TIME');
-
-    return sign(payload, jwtSecret, {
-      expiresIn: jwtExpirationTime,
+    return sign(payload, this.jwtSecret, {
+      expiresIn: this.jwtExpirationTime,
     });
   }
 }

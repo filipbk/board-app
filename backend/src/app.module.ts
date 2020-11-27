@@ -29,7 +29,8 @@ import { AuthModule } from './auth/auth.module';
       },
     }),
     ConfigModule.forRoot({
-      ignoreEnvFile: (process.env.USE_ENV_FILE || false) as boolean,
+      ignoreEnvFile:
+        process.env.IGNORE_ENV_FILE?.toLocaleLowerCase() === 'true',
       isGlobal: true,
       load: [databaseConfig],
       validationSchema: Joi.object({
