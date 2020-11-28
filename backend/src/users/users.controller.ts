@@ -8,21 +8,21 @@ export class UsersController {
     constructor(private service: UsersService) { }
 
     @Get(':id')
-    get(@Param() params) {
-        return this.service.getUser(params.id);
+    get(@Param('id') id: number) {
+        return this.service.getUser(id);
     }
 
-    @Put()
+    @Put("/")
     update(@Body() user: User) {
         return this.service.updateUser(user);
     }
 
     @Delete(':id')
-    deleteUser(@Param() params) {
-        return this.service.deleteUser(params.id);
+    deleteUser(@Param('id') id: number) {
+        return this.service.deleteUserById(id);
     }
 
-    @Post('createUser')
+    @Post()
     postUser(@Body() user: User) {
         return this.service.insertUser(user);
     }
