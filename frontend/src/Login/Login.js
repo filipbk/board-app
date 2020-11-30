@@ -18,8 +18,9 @@ class Login extends React.Component {
     }
 
     this.state = {
-      firstName: '',
-      lastName: ''
+        firstName: '',
+        lastName: '',
+        currentUser: currentUser
     };
 
     if (currentUser && currentUser.enabled) {
@@ -86,9 +87,14 @@ class Login extends React.Component {
 
   register() {
     const {firstName, lastName, currentUser} = this.state;
-    let userBody = Object.assign({}, currentUser, {firstName, lastName});
+    console.log(currentUser);
+    const userBody = {
+      firstName,
+      lastName,
+      id: currentUser.id
+    };
 
-    fetch('/users', {
+    fetch('http://localhost:3000/users', {
       body: JSON.stringify(userBody),
       method: 'PUT',
       headers: {'Content-Type': 'application/json'}
