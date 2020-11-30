@@ -2,6 +2,7 @@ import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 @Entity()
 export class User extends BaseEntity {
@@ -13,16 +14,16 @@ export class User extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  id!: number;
+  @IsNumber() @IsOptional() id!: number;
 
   @Column({ length: 255 })
-  email!: string;
+  @IsString() email!: string;
 
   @Column({ length: 255, nullable: true })
-  firstName?: string;
+  @IsString() firstName?: string;
 
   @Column({ length: 255, nullable: true })
-  lastName?: string;
+  @IsString() lastName?: string;
 
   @Exclude()
   @Column()
