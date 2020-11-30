@@ -54,7 +54,8 @@ export class Login extends React.Component {
       firstName,
       lastName,
       id: currentUser.id,
-      enabled: currentUser.enabled
+      email: currentUser.email,
+      enabled: true
     };
 
     usersService

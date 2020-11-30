@@ -1,18 +1,14 @@
-import { Injectable, Scope, Inject, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
 
-@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: UserRepository,
-    @Inject(REQUEST) private readonly request: Request,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -23,9 +19,7 @@ export class UsersService {
     return this.usersRepository.findOne({ id });
   }
 
-  updateUser(user: User, requestedUserId: number) {
-    const currentUser = this.request.user as TokenUserData;
-
+  updateUser(user: User, requestedUserId: number, currentUser: TokenUserData) {
     if (requestedUserId !== user.id) {
       throw new NotFoundException({
         message: 'Resource with given id does not exist!',

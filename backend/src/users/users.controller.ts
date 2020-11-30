@@ -16,6 +16,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Role } from '../auth/role';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserDto } from './user.dto';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import TokenUserData from '../auth/token-user-data';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('users')
 export class UsersController {
@@ -27,15 +30,15 @@ export class UsersController {
     return this.service.getUser(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
     @Body() userDto: UserDto,
+    @CurrentUser() currentUser: TokenUserData,
   ) {
-    console.log(userDto);
     const updatedUser = new User(userDto);
-    return this.service.updateUser(updatedUser, id);
+    return this.service.updateUser(updatedUser, id, currentUser);
   }
 
   @Roles(Role.ADMIN)
