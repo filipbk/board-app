@@ -1,7 +1,8 @@
 import React from 'react';
-import {Typography} from 'antd';
+import {Col, Row, Typography} from 'antd';
 import {authenticationService} from '../services';
-import {history} from '../util/history';
+import './LoginFailure.css';
+import {history} from '../util';
 
 class LoginFailure extends React.Component {
   constructor(props) {
@@ -16,9 +17,11 @@ class LoginFailure extends React.Component {
   }
   render() {
     return (
-      <div>
-        <Typography.Title>Login failed</Typography.Title>
-      </div>
+      <Row className='login-failure'>
+        <Col span={8} offset={8}>
+          <Typography.Title>Login failed</Typography.Title>
+        </Col>
+      </Row>
     );
   }
 }

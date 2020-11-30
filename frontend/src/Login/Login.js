@@ -1,14 +1,19 @@
-import * as React from 'react';
+import React from 'react';
 import './Login.css';
 import {authenticationService} from '../services';
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, notification} from 'antd';
 import * as jwt_decode from 'jwt-decode';
-import {history} from '../util/history';
+import {history} from '../util';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    const currentUser = authenticationService.currentUserValue();
+    let currentUser = authenticationService.currentUserValue();
+
+    if (currentUser && currentUser.enabled) {
+      history.push('/');
+    }
+
     const token = props.match.params.token;
 
     try {
@@ -17,17 +22,20 @@ class Login extends React.Component {
       history.push('/login/failure');
     }
 
-    this.state = {
-        firstName: '',
-        lastName: '',
-        currentUser: currentUser
-    };
+    if (token) {
+      authenticationService.login(token);
+      currentUser = authenticationService.currentUserValue();
+    }
 
     if (currentUser && currentUser.enabled) {
       history.push('/');
-    } else if (token) {
-      authenticationService.login(token);
     }
+
+    this.state = {
+      firstName: '',
+      lastName: '',
+      currentUser: currentUser
+    };
 
     this.register = this.register.bind(this);
   }
@@ -35,13 +43,7 @@ class Login extends React.Component {
   render() {
     return (
       <div className='form-wrapper'>
-        <Form
-          className='login-form'
-          initialValues={{
-            remember: true
-          }}
-          onFinish={this.register}
-        >
+        <Form className='login-form' onFinish={this.register}>
           <Form.Item
             name='firstName'
             rules={[
@@ -87,20 +89,23 @@ class Login extends React.Component {
 
   register() {
     const {firstName, lastName, currentUser} = this.state;
-    console.log(currentUser);
+    const url = process.env.REACT_APP_API_URL;
+
     const userBody = {
       firstName,
       lastName,
       id: currentUser.id
     };
 
-    fetch('http://localhost:3000/users', {
-      body: JSON.stringify(userBody),
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'}
-    })
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+    authenticationService
+      .register(userBody)
+      .then(() => window.location.assign(`${url}/auth/google`))
+      .catch((error) =>
+        notification.error({
+          message: 'Error',
+          description: error
+        })
+      );
   }
 }
 

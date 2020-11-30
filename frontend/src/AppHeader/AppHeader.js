@@ -42,7 +42,7 @@ class AppHeader extends React.Component {
             onClick={this.redirectToGoogleAuth}
             className='logout-btn'
           >
-            Log in
+            Log in with Google
           </Button>
         </Menu.Item>
       ];

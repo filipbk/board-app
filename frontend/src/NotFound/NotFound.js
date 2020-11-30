@@ -2,14 +2,14 @@ import React from 'react';
 import {Col, Row, Typography} from 'antd';
 import './NotFound.css';
 import {authenticationService} from '../services';
-import {history} from '../util/history';
+import {history} from '../util';
 
 class NotFound extends React.Component {
   constructor(props) {
     super(props);
 
     const user = authenticationService.currentUserValue();
-    console.log(user);
+
     if (user && !user.enabled) {
       history.push(`/login/success/${authenticationService.getUserToken()}`);
     }

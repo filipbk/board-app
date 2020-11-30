@@ -5,7 +5,7 @@ import {Layout} from 'antd';
 import {Router, Switch, Route} from 'react-router-dom';
 import {AppHeaderWithRouter} from './AppHeader';
 import {NotFound} from './NotFound';
-import {history} from './util/history';
+import {history} from './util';
 
 function App() {
   return (

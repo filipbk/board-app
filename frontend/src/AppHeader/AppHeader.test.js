@@ -40,7 +40,7 @@ describe('AppHeader', () => {
         <AppHeaderWithRouter />
       </BrowserRouter>
     );
-    expect(appHeader.find(Button).at(0).text()).toEqual('Log in');
+    expect(appHeader.find(Button).at(0).text()).toEqual('Log in with Google');
     expect(spy).toHaveBeenCalled();
   });
 

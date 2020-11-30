@@ -1,5 +1,6 @@
 import {BehaviorSubject} from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
+import {handleResponse} from '../util';
 
 const userToken = localStorage.getItem('currentUser');
 const currentUserSubject = userToken
@@ -19,6 +20,15 @@ export const authenticationService = {
 
     localStorage.setItem('currentUser', token);
     currentUserSubject.next(user);
+  },
+
+  register: function (userBody) {
+    const url = process.env.REACT_APP_API_URL;
+    return fetch(`${url}/users`, {
+      body: JSON.stringify(userBody),
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'}
+    }).then(handleResponse);
   },
 
   logout: function () {
