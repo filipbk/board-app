@@ -13,5 +13,6 @@ export class UserDto {
   @IsString()
   lastName!: string;
 
+  @IsOptional()
   enabled!: boolean;
 }

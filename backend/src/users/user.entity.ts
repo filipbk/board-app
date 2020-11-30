@@ -41,6 +41,6 @@ export class User extends BaseEntity {
   enabled!: boolean;
 
   @Exclude()
-  @Column()
+  @Column({ default: Role.USER })
   role!: Role;
 }
