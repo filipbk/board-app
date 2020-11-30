@@ -24,6 +24,7 @@ module.exports = {
         "react"
     ],
     "rules": {
+        "react/prop-types": 0,
         "react/jsx-indent": ["error", 2],
         "react/jsx-closing-bracket-location": [1, 'tag-aligned'],
         "react/jsx-curly-spacing": [2, {"when": "never", "children": true}],

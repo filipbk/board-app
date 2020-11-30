@@ -1,0 +1,31 @@
+.app-title {
+  float: left;
+  padding-left: 10px;
+}
+
+.app-header {
+  position: fixed;
+  width: 100%;
+  box-shadow: 0 4px 8px #f0f1f2;
+  padding: 0;
+  background-color: #fff;
+}
+
+.app-menu {
+  float: right;
+}
+
+@media (max-width: 768px) {
+  .app-title a {
+    font-size: 20px;
+  }
+
+  .app-menu > li {
+    padding: 0 15px;
+  }
+
+  .app-menu > li > a {
+    padding: 0 15px;
+    margin: 0 -15px;
+  }
+}
