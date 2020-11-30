@@ -3,7 +3,7 @@ import App from './App';
 import {shallow} from 'enzyme';
 
 describe('App', () => {
-  it('renders learn react link', () => {
+  it('renders app component', () => {
     const app = shallow(<App />);
     expect(app).toBeInTheDocument;
   });

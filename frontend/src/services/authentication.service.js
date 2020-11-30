@@ -1,42 +1,40 @@
 import {BehaviorSubject} from 'rxjs';
-import {handleResponse} from '../util/handleResponse';
+import * as jwt_decode from 'jwt-decode';
 
-const currentUserSubject = new BehaviorSubject(
-  JSON.parse(localStorage.getItem('currentUser'))
-);
+const userToken = localStorage.getItem('currentUser');
+const currentUserSubject = userToken
+  ? new BehaviorSubject(jwt_decode(userToken))
+  : new BehaviorSubject(null);
 
 export const authenticationService = {
-  login,
-  logout,
-  currentUser,
-  currentUserValue
+  login: function (token) {
+    let user;
+
+    try {
+      user = jwt_decode(token);
+    } catch (e) {
+      this.logout();
+      return;
+    }
+
+    localStorage.setItem('currentUser', token);
+    currentUserSubject.next(user);
+  },
+
+  logout: function () {
+    localStorage.removeItem('currentUser');
+    currentUserSubject.next(null);
+  },
+
+  currentUser: function () {
+    return currentUserSubject.asObservable();
+  },
+
+  currentUserValue: function () {
+    return currentUserSubject.value;
+  },
+
+  getUserToken: function () {
+    return localStorage.getItem('currentUser');
+  }
 };
-function login(username, password) {
-  const options = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({username, password})
-  };
-
-  return fetch('/login', options)
-    .then(handleResponse)
-    .then((user) => {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      currentUserSubject.next(user);
-
-      return user;
-    });
-}
-
-function logout() {
-  localStorage.removeItem('currentUser');
-  currentUserSubject.next(null);
-}
-
-function currentUser() {
-  return currentUserSubject.asObservable();
-}
-
-function currentUserValue() {
-  return currentUserSubject.value;
-}

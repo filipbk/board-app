@@ -2,21 +2,33 @@ import * as React from 'react';
 import './Login.css';
 import {authenticationService} from '../services';
 import {Form, Input, Button} from 'antd';
+import * as jwt_decode from 'jwt-decode';
+import {history} from '../util/history';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    const currentUser = authenticationService.currentUserValue();
+    const token = props.match.params.token;
 
-    if (authenticationService.currentUserValue()) {
-      props.history.push('/');
+    try {
+      jwt_decode(token);
+    } catch (e) {
+      history.push('/login/failure');
     }
 
     this.state = {
-      username: '',
-      password: ''
+      firstName: '',
+      lastName: ''
     };
 
-    this.login = this.login.bind(this);
+    if (currentUser && currentUser.enabled) {
+      history.push('/');
+    } else if (token) {
+      authenticationService.login(token);
+    }
+
+    this.register = this.register.bind(this);
   }
 
   render() {
@@ -27,35 +39,34 @@ class Login extends React.Component {
           initialValues={{
             remember: true
           }}
-          onFinish={this.login}
+          onFinish={this.register}
         >
           <Form.Item
-            name='username'
+            name='firstName'
             rules={[
               {
                 required: true,
-                message: 'Please input your Username!'
+                message: 'Please input your name!'
               }
             ]}
           >
             <Input
-              placeholder='Username'
-              onChange={(e) => this.setState({username: e.target.value})}
+              placeholder='Name'
+              onChange={(e) => this.setState({firstName: e.target.value})}
             />
           </Form.Item>
           <Form.Item
-            name='password'
+            name='lastName'
             rules={[
               {
                 required: true,
-                message: 'Please input your Password!'
+                message: 'Please input your last name!'
               }
             ]}
           >
             <Input
-              type='password'
-              placeholder='Password'
-              onChange={(e) => this.setState({password: e.target.value})}
+              placeholder='Last name'
+              onChange={(e) => this.setState({lastName: e.target.value})}
             />
           </Form.Item>
 
@@ -65,7 +76,7 @@ class Login extends React.Component {
               htmlType='submit'
               className='login-form-button'
             >
-              Log in
+              Submit
             </Button>
           </Form.Item>
         </Form>
@@ -73,7 +84,18 @@ class Login extends React.Component {
     );
   }
 
-  login() {}
+  register() {
+    const {firstName, lastName, currentUser} = this.state;
+    let userBody = Object.assign({}, currentUser, {firstName, lastName});
+
+    fetch('/users', {
+      body: JSON.stringify(userBody),
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'}
+    })
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  }
 }
 
 export {Login};
