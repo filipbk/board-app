@@ -1,23 +1,35 @@
 import React from 'react';
 import './Login.css';
-import {authenticationService} from '../services';
+import {authenticationService, usersService} from '../services';
 import {Form, Input, Button, notification} from 'antd';
-import * as jwt_decode from 'jwt-decode';
+import * as jwtDecode from 'jwt-decode';
 import {history} from '../util';
 
 export class Login extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      firstName: '',
+      lastName: '',
+      currentUser: null
+    };
+  }
+
+  componentDidMount() {
+    this.checkUserPermissions();
+  }
+
+  checkUserPermissions() {
+    const token = this.props.match.params.token;
     let currentUser = authenticationService.currentUserValue();
 
     if (currentUser && currentUser.enabled) {
       history.push('/');
     }
 
-    const token = props.match.params.token;
-
     try {
-      jwt_decode(token);
+      jwtDecode(token);
     } catch (e) {
       history.push('/login/failure');
     }
@@ -29,22 +41,39 @@ export class Login extends React.Component {
 
     if (currentUser && currentUser.enabled) {
       history.push('/');
+    } else {
+      this.setState(currentUser);
     }
+  }
 
-    this.state = {
-      firstName: '',
-      lastName: '',
-      currentUser: currentUser
+  register() {
+    const {firstName, lastName, currentUser} = this.state;
+    const url = process.env.REACT_APP_API_URL;
+
+    const userBody = {
+      firstName,
+      lastName,
+      id: currentUser.id,
+      enabled: currentUser.enabled
     };
 
-    this.register = this.register.bind(this);
+    usersService
+      .updateUser(userBody, currentUser.id)
+      .then(() => window.location.assign(`${url}/auth/google`))
+      .catch((error) =>
+        notification.error({
+          message: 'Error',
+          description: error
+        })
+      );
   }
 
   render() {
     return (
       <div className='form-wrapper'>
-        <Form className='login-form' onFinish={this.register}>
+        <Form className='login-form' onFinish={() => this.register()}>
           <Form.Item
+            id='firstName'
             name='firstName'
             rules={[
               {
@@ -59,6 +88,7 @@ export class Login extends React.Component {
             />
           </Form.Item>
           <Form.Item
+            id='lastName'
             name='lastName'
             rules={[
               {
@@ -85,26 +115,5 @@ export class Login extends React.Component {
         </Form>
       </div>
     );
-  }
-
-  register() {
-    const {firstName, lastName, currentUser} = this.state;
-    const url = process.env.REACT_APP_API_URL;
-
-    const userBody = {
-      firstName,
-      lastName,
-      id: currentUser.id
-    };
-
-    authenticationService
-      .register(userBody)
-      .then(() => window.location.assign(`${url}/auth/google`))
-      .catch((error) =>
-        notification.error({
-          message: 'Error',
-          description: error
-        })
-      );
   }
 }

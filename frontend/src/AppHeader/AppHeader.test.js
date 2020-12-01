@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppHeaderWithRouter} from './AppHeader';
+import {AppHeader} from './AppHeader';
 import {BrowserRouter, Link} from 'react-router-dom';
 import {authenticationService} from '../services';
 import {BehaviorSubject} from 'rxjs';
@@ -10,9 +10,10 @@ describe('AppHeader', () => {
   it('renders app header link to main page', () => {
     const appHeader = mount(
       <BrowserRouter>
-        <AppHeaderWithRouter />
+        <AppHeader />
       </BrowserRouter>
     );
+
     expect(appHeader.find(Link).at(0).text()).toEqual('Board App');
   });
 
@@ -24,9 +25,10 @@ describe('AppHeader', () => {
       );
     const appHeader = mount(
       <BrowserRouter>
-        <AppHeaderWithRouter />
+        <AppHeader />
       </BrowserRouter>
     );
+
     expect(appHeader.find(Button).at(0).text()).toEqual('Logout');
     expect(spy).toHaveBeenCalled();
   });
@@ -37,9 +39,10 @@ describe('AppHeader', () => {
       .mockImplementation(() => new BehaviorSubject(null).asObservable());
     const appHeader = mount(
       <BrowserRouter>
-        <AppHeaderWithRouter />
+        <AppHeader />
       </BrowserRouter>
     );
+
     expect(appHeader.find(Button).at(0).text()).toEqual('Log in with Google');
     expect(spy).toHaveBeenCalled();
   });
@@ -52,11 +55,13 @@ describe('AppHeader', () => {
       );
     const appHeader = mount(
       <BrowserRouter>
-        <AppHeaderWithRouter />
+        <AppHeader />
       </BrowserRouter>
     );
     const logoutSpy = jest.spyOn(authenticationService, 'logout');
+
     appHeader.find(Button).simulate('click');
+
     expect(spy).toHaveBeenCalled();
     expect(logoutSpy).toHaveBeenCalled();
   });

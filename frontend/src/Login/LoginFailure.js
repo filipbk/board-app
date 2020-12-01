@@ -5,8 +5,11 @@ import './LoginFailure.css';
 import {history} from '../util';
 
 export class LoginFailure extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    this.checkUserPermissions();
+  }
+
+  checkUserPermissions() {
     const user = authenticationService.currentUserValue();
 
     if (user && !user.enabled) {
@@ -15,6 +18,7 @@ export class LoginFailure extends React.Component {
       history.push('/');
     }
   }
+
   render() {
     return (
       <Row className='login-failure'>

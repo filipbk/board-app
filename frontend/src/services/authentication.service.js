@@ -1,12 +1,11 @@
 import {BehaviorSubject} from 'rxjs';
-import * as jwt_decode from 'jwt-decode';
-import {handleResponse} from '../util';
+import * as jwtDecode from 'jwt-decode';
 
 class AuthenticationService {
   constructor() {
-    this.userToken = localStorage.getItem('currentUser');
+    this.userToken = localStorage.getItem('token');
     this.currentUserSubject = this.userToken
-      ? new BehaviorSubject(jwt_decode(this.userToken))
+      ? new BehaviorSubject(jwtDecode(this.userToken))
       : new BehaviorSubject(null);
   }
 
@@ -14,27 +13,18 @@ class AuthenticationService {
     let user;
 
     try {
-      user = jwt_decode(token);
+      user = jwtDecode(token);
     } catch (e) {
       this.logout();
       return;
     }
 
-    localStorage.setItem('currentUser', token);
+    localStorage.setItem('token', token);
     this.currentUserSubject.next(user);
   }
 
-  register(userBody) {
-    const url = process.env.REACT_APP_API_URL;
-    return fetch(`${url}/users`, {
-      body: JSON.stringify(userBody),
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'}
-    }).then(handleResponse);
-  }
-
   logout() {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     this.currentUserSubject.next(null);
   }
 
@@ -47,7 +37,7 @@ class AuthenticationService {
   }
 
   getUserToken() {
-    return localStorage.getItem('currentUser');
+    return localStorage.getItem('token');
   }
 }
 

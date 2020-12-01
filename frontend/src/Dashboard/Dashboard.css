@@ -1,0 +1,22 @@
+h2.dashboard-title {
+  color: rgb(14, 80, 149);
+  text-align: center;
+}
+
+.categories-container {
+  background-color: #f7f7f7;
+}
+
+.categories-container h4 {
+  color: rgb(14, 80, 149);
+  text-align: center;
+}
+.announcement-card {
+  margin: 0 auto;
+  width: 95%;
+}
+
+.announcement-card img {
+  height: 200px;
+  width: 100%;
+}
