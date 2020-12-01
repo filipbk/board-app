@@ -20,7 +20,7 @@ describe('AppHeader', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
       .mockImplementation(() =>
-        new BehaviorSubject({token: 'aaa', name: 'Bob'}).asObservable()
+        new BehaviorSubject({firstName: 'Bob'}).asObservable()
       );
     const appHeader = mount(
       <BrowserRouter>
@@ -40,8 +40,7 @@ describe('AppHeader', () => {
         <AppHeaderWithRouter />
       </BrowserRouter>
     );
-    expect(appHeader.find(Link).at(1).text()).toEqual('Log in');
-    expect(appHeader.find(Link).at(2).text()).toEqual('Signup');
+    expect(appHeader.find(Button).at(0).text()).toEqual('Log in with Google');
     expect(spy).toHaveBeenCalled();
   });
 
@@ -49,7 +48,7 @@ describe('AppHeader', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
       .mockImplementation(() =>
-        new BehaviorSubject({token: 'aaa', name: 'Bob'}).asObservable()
+        new BehaviorSubject({firstName: 'Bob'}).asObservable()
       );
     const appHeader = mount(
       <BrowserRouter>

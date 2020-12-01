@@ -1,42 +1,55 @@
 import {BehaviorSubject} from 'rxjs';
-import {handleResponse} from '../util/handleResponse';
+import * as jwt_decode from 'jwt-decode';
+import {handleResponse} from '../util';
 
-const currentUserSubject = new BehaviorSubject(
-  JSON.parse(localStorage.getItem('currentUser'))
-);
+class AuthenticationService {
+  constructor() {
+    this.userToken = localStorage.getItem('currentUser');
+    this.currentUserSubject = this.userToken
+      ? new BehaviorSubject(jwt_decode(this.userToken))
+      : new BehaviorSubject(null);
+  }
 
-export const authenticationService = {
-  login,
-  logout,
-  currentUser,
-  currentUserValue
-};
-function login(username, password) {
-  const options = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({username, password})
-  };
+  login(token) {
+    let user;
 
-  return fetch('/login', options)
-    .then(handleResponse)
-    .then((user) => {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      currentUserSubject.next(user);
+    try {
+      user = jwt_decode(token);
+    } catch (e) {
+      this.logout();
+      return;
+    }
 
-      return user;
-    });
+    localStorage.setItem('currentUser', token);
+    this.currentUserSubject.next(user);
+  }
+
+  register(userBody) {
+    const url = process.env.REACT_APP_API_URL;
+    return fetch(`${url}/users`, {
+      body: JSON.stringify(userBody),
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'}
+    }).then(handleResponse);
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+  }
+
+  currentUser() {
+    return this.currentUserSubject.asObservable();
+  }
+
+  currentUserValue() {
+    return this.currentUserSubject.value;
+  }
+
+  getUserToken() {
+    return localStorage.getItem('currentUser');
+  }
 }
 
-function logout() {
-  localStorage.removeItem('currentUser');
-  currentUserSubject.next(null);
-}
-
-function currentUser() {
-  return currentUserSubject.asObservable();
-}
-
-function currentUserValue() {
-  return currentUserSubject.value;
-}
+const authenticationService = new AuthenticationService();
+export {authenticationService};

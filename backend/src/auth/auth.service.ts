@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { sign } from 'jsonwebtoken';
-import { Provider } from './provider';
-import { Role } from './role';
-import { UsersService } from '../users/users.service';
+import {Injectable} from '@nestjs/common';
+import {ConfigService} from '@nestjs/config';
+import {sign} from 'jsonwebtoken';
+import {Provider} from './provider';
+import {Role} from './role';
+import {UsersService} from '../users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -37,13 +37,14 @@ export class AuthService {
     }
 
     return this.generateJwtToken(
-      thirdPartyId,
-      provider,
-      email,
-      user.enabled,
-      user.roles,
-      user.firstName,
-      user.lastName,
+        user.id,
+        thirdPartyId,
+        provider,
+        email,
+        user.enabled,
+        user.roles,
+        user.firstName,
+        user.lastName,
     );
   }
 
@@ -60,15 +61,17 @@ export class AuthService {
   }
 
   private generateJwtToken(
-    thirdPartyId: string,
-    provider: Provider,
-    email: string,
-    enabled: boolean,
-    roles: Role[],
-    firstName?: string,
-    lastName?: string,
+      id: number,
+      thirdPartyId: string,
+      provider: Provider,
+      email: string,
+      enabled: boolean,
+      roles: Role[],
+      firstName?: string,
+      lastName?: string,
   ): string {
     const payload = {
+      id,
       thirdPartyId,
       provider,
       email,

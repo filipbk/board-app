@@ -3,6 +3,11 @@
   padding-left: 10px;
 }
 
+.app-title a,
+.app-menu span {
+  font-size: 18px;
+}
+
 .app-header {
   position: fixed;
   width: 100%;

@@ -36,11 +36,14 @@ class AppHeader extends React.Component {
       ];
     } else {
       menuItems = [
-        <Menu.Item key='/login'>
-          <Link to='/login'>Log in</Link>
-        </Menu.Item>,
-        <Menu.Item key='/signup'>
-          <Link to='/signup'>Signup</Link>
+        <Menu.Item key='/auth/google'>
+          <Button
+            type='link'
+            onClick={this.redirectToGoogleAuth}
+            className='logout-btn'
+          >
+            Log in with Google
+          </Button>
         </Menu.Item>
       ];
     }
@@ -63,8 +66,14 @@ class AppHeader extends React.Component {
 
   logout() {
     authenticationService.logout();
+    this.props.history.push('/');
+  }
+
+  redirectToGoogleAuth() {
+    const url = process.env.REACT_APP_API_URL;
+    window.location.assign(`${url}/auth/google`);
   }
 }
 
 const AppHeaderWithRouter = withRouter(AppHeader);
-export {AppHeaderWithRouter, AppHeader};
+export {AppHeaderWithRouter};
