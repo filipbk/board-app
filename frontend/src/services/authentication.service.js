@@ -2,13 +2,15 @@ import {BehaviorSubject} from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
 import {handleResponse} from '../util';
 
-const userToken = localStorage.getItem('currentUser');
-const currentUserSubject = userToken
-  ? new BehaviorSubject(jwt_decode(userToken))
-  : new BehaviorSubject(null);
+class AuthenticationService {
+  constructor() {
+    this.userToken = localStorage.getItem('currentUser');
+    this.currentUserSubject = this.userToken
+      ? new BehaviorSubject(jwt_decode(this.userToken))
+      : new BehaviorSubject(null);
+  }
 
-export const authenticationService = {
-  login: function (token) {
+  login(token) {
     let user;
 
     try {
@@ -19,32 +21,35 @@ export const authenticationService = {
     }
 
     localStorage.setItem('currentUser', token);
-    currentUserSubject.next(user);
-  },
+    this.currentUserSubject.next(user);
+  }
 
-  register: function (userBody) {
+  register(userBody) {
     const url = process.env.REACT_APP_API_URL;
     return fetch(`${url}/users`, {
       body: JSON.stringify(userBody),
       method: 'PUT',
       headers: {'Content-Type': 'application/json'}
     }).then(handleResponse);
-  },
+  }
 
-  logout: function () {
+  logout() {
     localStorage.removeItem('currentUser');
-    currentUserSubject.next(null);
-  },
+    this.currentUserSubject.next(null);
+  }
 
-  currentUser: function () {
-    return currentUserSubject.asObservable();
-  },
+  currentUser() {
+    return this.currentUserSubject.asObservable();
+  }
 
-  currentUserValue: function () {
-    return currentUserSubject.value;
-  },
+  currentUserValue() {
+    return this.currentUserSubject.value;
+  }
 
-  getUserToken: function () {
+  getUserToken() {
     return localStorage.getItem('currentUser');
   }
-};
+}
+
+const authenticationService = new AuthenticationService();
+export {authenticationService};

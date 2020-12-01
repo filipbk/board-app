@@ -5,7 +5,7 @@ import {Form, Input, Button, notification} from 'antd';
 import * as jwt_decode from 'jwt-decode';
 import {history} from '../util';
 
-class Login extends React.Component {
+export class Login extends React.Component {
   constructor(props) {
     super(props);
     let currentUser = authenticationService.currentUserValue();
@@ -108,5 +108,3 @@ class Login extends React.Component {
       );
   }
 }
-
-export {Login};

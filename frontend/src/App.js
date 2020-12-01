@@ -7,21 +7,21 @@ import {AppHeaderWithRouter} from './AppHeader';
 import {NotFound} from './NotFound';
 import {history} from './util';
 
-function App() {
-  return (
-    <Layout>
-      <Router history={history}>
-        <AppHeaderWithRouter />
-        <Layout.Content className='app-content'>
-          <Switch>
-            <Route exact path='/login/success/:token' component={Login} />
-            <Route exact path='/login/failure' component={LoginFailure} />
-            <Route path='*' exact={true} component={NotFound} />
-          </Switch>
-        </Layout.Content>
-      </Router>
-    </Layout>
-  );
+export class App extends React.Component {
+  render() {
+    return (
+      <Layout>
+        <Router history={history}>
+          <AppHeaderWithRouter />
+          <Layout.Content className='app-content'>
+            <Switch>
+              <Route exact path='/login/success/:token' component={Login} />
+              <Route exact path='/login/failure' component={LoginFailure} />
+              <Route path='*' exact={true} component={NotFound} />
+            </Switch>
+          </Layout.Content>
+        </Router>
+      </Layout>
+    );
+  }
 }
-
-export default App;

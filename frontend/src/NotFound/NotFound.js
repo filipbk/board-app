@@ -4,7 +4,7 @@ import './NotFound.css';
 import {authenticationService} from '../services';
 import {history} from '../util';
 
-class NotFound extends React.Component {
+export class NotFound extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,5 +24,3 @@ class NotFound extends React.Component {
     );
   }
 }
-
-export {NotFound};

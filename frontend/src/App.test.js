@@ -1,8 +1,7 @@
 import React from 'react';
-import App from './App';
+import {App} from './App';
 import {shallow, mount} from 'enzyme';
 import {MemoryRouter} from 'react-router';
-import {Login, LoginFailure} from './Login';
 import {NotFound} from './NotFound';
 
 describe('App', () => {
@@ -17,7 +16,6 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(wrapper.find(Login)).toHaveLength(0);
     expect(wrapper.find(NotFound)).toHaveLength(1);
   });
 });

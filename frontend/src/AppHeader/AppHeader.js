@@ -76,4 +76,4 @@ class AppHeader extends React.Component {
 }
 
 const AppHeaderWithRouter = withRouter(AppHeader);
-export {AppHeaderWithRouter, AppHeader};
+export {AppHeaderWithRouter};

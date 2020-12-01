@@ -4,7 +4,7 @@ import {authenticationService} from '../services';
 import './LoginFailure.css';
 import {history} from '../util';
 
-class LoginFailure extends React.Component {
+export class LoginFailure extends React.Component {
   constructor(props) {
     super(props);
     const user = authenticationService.currentUserValue();
@@ -25,5 +25,3 @@ class LoginFailure extends React.Component {
     );
   }
 }
-
-export {LoginFailure};
