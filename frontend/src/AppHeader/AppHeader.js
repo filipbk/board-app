@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './AppHeader.css';
-import {Layout, Menu} from 'antd';
+import {Layout, Menu, Button} from 'antd';
 import {Link, withRouter} from 'react-router-dom';
 import {authenticationService} from '../services';
 const {Header} = Layout;
@@ -10,7 +10,7 @@ class AppHeader extends React.Component {
     super(props);
 
     this.state = {
-      currentUser: null,
+      currentUser: null
     };
 
     this.logout = this.logout.bind(this);
@@ -19,7 +19,7 @@ class AppHeader extends React.Component {
   componentDidMount() {
     authenticationService
       .currentUser()
-      .subscribe((x) => this.setState({currentUser: x}));
+      .subscribe((currentUser) => this.setState({currentUser}));
   }
 
   render() {
@@ -28,18 +28,20 @@ class AppHeader extends React.Component {
 
     if (currentUser) {
       menuItems = [
-        <Menu.Item data-testid='logout-btn' key='/logout' onClick={this.logout}>
-          Logout
-        </Menu.Item>,
+        <Menu.Item key='/logout'>
+          <Button type='link' onClick={this.logout} className='logout-btn'>
+            Logout
+          </Button>
+        </Menu.Item>
       ];
     } else {
       menuItems = [
         <Menu.Item key='/login'>
-          <Link to='/login'>Login</Link>
+          <Link to='/login'>Log in</Link>
         </Menu.Item>,
         <Menu.Item key='/signup'>
           <Link to='/signup'>Signup</Link>
-        </Menu.Item>,
+        </Menu.Item>
       ];
     }
 

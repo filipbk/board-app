@@ -7,12 +7,16 @@
   position: fixed;
   width: 100%;
   box-shadow: 0 4px 8px #f0f1f2;
-  padding: 0;
+  padding: 0 20px;
   background-color: #fff;
 }
 
 .app-menu {
   float: right;
+}
+
+.logout-btn {
+  color: inherit;
 }
 
 @media (max-width: 768px) {
