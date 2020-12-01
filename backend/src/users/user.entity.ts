@@ -6,11 +6,9 @@ import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 @Entity()
 export class User extends BaseEntity {
-  constructor(thirdPartyId: string, provider: Provider, email: string) {
+  constructor(partial: Partial<User>) {
     super();
-    this.thirdPartyId = thirdPartyId;
-    this.provider = provider;
-    this.email = email;
+    Object.assign(this, partial);
   }
 
   @PrimaryGeneratedColumn()
@@ -27,11 +25,11 @@ export class User extends BaseEntity {
 
   @Exclude()
   @Column()
-  thirdPartyId: string;
+  thirdPartyId!: string;
 
   @Exclude()
   @Column()
-  provider: Provider;
+  provider!: Provider;
 
   @Exclude()
   @Column({ default: false })
