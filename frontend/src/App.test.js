@@ -7,7 +7,7 @@ import {Login} from './Login';
 import {Dashboard} from './Dashboard';
 
 describe('App', () => {
-  it('renders learn react link', () => {
+  it('renders app component', () => {
     const app = shallow(<App />);
     expect(app).toBeInTheDocument;
   });

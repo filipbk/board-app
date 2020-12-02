@@ -40,7 +40,7 @@ export class Dashboard extends React.Component {
     const {categories} = this.state;
 
     return categories
-      .sort(this.sortCategoriesAlphabetically)
+      .sort((a, b) => a.name.localeCompare(b.name))
       .map((item, key) => (
         <Col key={key}>
           <Card
@@ -52,16 +52,6 @@ export class Dashboard extends React.Component {
           </Card>
         </Col>
       ));
-  }
-
-  sortCategoriesAlphabetically(firstItem, secondItem) {
-    if (firstItem.name < secondItem.name) {
-      return -1;
-    }
-    if (firstItem.name > secondItem.name) {
-      return 1;
-    }
-    return 0;
   }
 
   render() {
