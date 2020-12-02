@@ -1,26 +1,25 @@
 import {
   Controller,
-  Post,
   Body,
   Get,
   Put,
   Delete,
   Param,
-  UseGuards, UsePipes,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { ActiveGuard } from '../auth/guards/active.guard';
-import {RolesGuard} from "../auth/guards/roles.guard";
-import {Role} from "../auth/role";
-import {Roles} from "../auth/decorators/roles.decorator";
-import {UserDto} from "./user.dto";
-import {CurrentUser} from "../auth/decorators/user.decorator";
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Role } from '../auth/role';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserDto } from './user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private service: UsersService) {}
+  constructor(private readonly service: UsersService) {}
 
   @UseGuards(AuthGuard('jwt'), ActiveGuard)
   @Get(':id')
@@ -28,12 +27,15 @@ export class UsersController {
     return this.service.getUser(id);
   }
 
-  @UseGuards(AuthGuard('jwt'), ActiveGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  update(@Param('id') id: number, @Body() userDto: UserDto, @CurrentUser() currentUser: User) {
+  update(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() userDto: UserDto,
+  ) {
+    console.log(userDto);
     const updatedUser = new User(userDto);
-
-    return this.service.updateUser(updatedUser, id, currentUser);
+    return this.service.updateUser(updatedUser, id);
   }
 
   @Roles(Role.ADMIN)
