@@ -1,0 +1,28 @@
+h2.dashboard-title {
+  color: rgb(14, 80, 149);
+  text-align: center;
+  margin: 50px 0;
+}
+
+.categories-container {
+  background-color: #f7f7f7;
+}
+
+.categories-container h4 {
+  color: rgb(14, 80, 149);
+  text-align: center;
+  margin-top: 10px;
+}
+.announcement-card {
+  margin: 0 auto;
+  width: 95%;
+}
+
+.announcement-card img {
+  height: 130px;
+  width: 100%;
+}
+
+.announcement-card .ant-card-meta-title {
+  font-size: 15px;
+}

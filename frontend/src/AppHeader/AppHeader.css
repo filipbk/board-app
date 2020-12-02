@@ -14,27 +14,14 @@
   box-shadow: 0 4px 8px #f0f1f2;
   padding: 0 20px;
   background-color: #fff;
+  z-index: 10;
 }
 
 .app-menu {
   float: right;
 }
 
-.logout-btn {
+.logout-btn,
+.login-btn {
   color: inherit;
-}
-
-@media (max-width: 768px) {
-  .app-title a {
-    font-size: 20px;
-  }
-
-  .app-menu > li {
-    padding: 0 15px;
-  }
-
-  .app-menu > li > a {
-    padding: 0 15px;
-    margin: 0 -15px;
-  }
 }

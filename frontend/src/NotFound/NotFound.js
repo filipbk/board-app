@@ -5,15 +5,18 @@ import {authenticationService} from '../services';
 import {history} from '../util';
 
 export class NotFound extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    this.checkUserPermissions();
+  }
 
+  checkUserPermissions() {
     const user = authenticationService.currentUserValue();
 
     if (user && !user.enabled) {
       history.push(`/login/success/${authenticationService.getUserToken()}`);
     }
   }
+
   render() {
     return (
       <Row className='not-found'>

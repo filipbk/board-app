@@ -1,18 +1,15 @@
 import React from 'react';
-import {AppHeaderWithRouter} from './AppHeader';
-import {BrowserRouter, Link} from 'react-router-dom';
+import {AppHeader} from './AppHeader';
+import {Link} from 'react-router-dom';
 import {authenticationService} from '../services';
 import {BehaviorSubject} from 'rxjs';
-import {mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {Button} from 'antd';
 
 describe('AppHeader', () => {
   it('renders app header link to main page', () => {
-    const appHeader = mount(
-      <BrowserRouter>
-        <AppHeaderWithRouter />
-      </BrowserRouter>
-    );
+    const appHeader = shallow(<AppHeader />);
+
     expect(appHeader.find(Link).at(0).text()).toEqual('Board App');
   });
 
@@ -22,11 +19,8 @@ describe('AppHeader', () => {
       .mockImplementation(() =>
         new BehaviorSubject({firstName: 'Bob'}).asObservable()
       );
-    const appHeader = mount(
-      <BrowserRouter>
-        <AppHeaderWithRouter />
-      </BrowserRouter>
-    );
+    const appHeader = shallow(<AppHeader />);
+
     expect(appHeader.find(Button).at(0).text()).toEqual('Logout');
     expect(spy).toHaveBeenCalled();
   });
@@ -35,11 +29,8 @@ describe('AppHeader', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
       .mockImplementation(() => new BehaviorSubject(null).asObservable());
-    const appHeader = mount(
-      <BrowserRouter>
-        <AppHeaderWithRouter />
-      </BrowserRouter>
-    );
+    const appHeader = shallow(<AppHeader />);
+
     expect(appHeader.find(Button).at(0).text()).toEqual('Log in with Google');
     expect(spy).toHaveBeenCalled();
   });
@@ -50,13 +41,11 @@ describe('AppHeader', () => {
       .mockImplementation(() =>
         new BehaviorSubject({firstName: 'Bob'}).asObservable()
       );
-    const appHeader = mount(
-      <BrowserRouter>
-        <AppHeaderWithRouter />
-      </BrowserRouter>
-    );
+    const appHeader = shallow(<AppHeader />);
     const logoutSpy = jest.spyOn(authenticationService, 'logout');
+
     appHeader.find(Button).simulate('click');
+
     expect(spy).toHaveBeenCalled();
     expect(logoutSpy).toHaveBeenCalled();
   });
