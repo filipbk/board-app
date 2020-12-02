@@ -42,7 +42,7 @@ export class Login extends React.Component {
     if (currentUser && currentUser.enabled) {
       history.push('/');
     } else {
-      this.setState(currentUser);
+      this.setState({currentUser});
     }
   }
 
@@ -63,7 +63,7 @@ export class Login extends React.Component {
       .catch((error) =>
         notification.error({
           message: 'Error',
-          description: error
+          description: error.message || error
         })
       );
   }

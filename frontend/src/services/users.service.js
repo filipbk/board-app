@@ -1,4 +1,5 @@
 import {handleResponse} from '../util';
+import {authenticationService} from "./authentication.service";
 
 class UsersService {
   updateUser(userBody, id) {
@@ -6,7 +7,7 @@ class UsersService {
     return fetch(`${url}/users/${id}`, {
       body: JSON.stringify(userBody),
       method: 'PUT',
-      headers: {'Content-Type': 'application/json'}
+      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${authenticationService.getUserToken()}`}
     }).then(handleResponse);
   }
 }
