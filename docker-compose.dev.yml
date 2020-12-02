@@ -36,6 +36,7 @@ services:
       - '3000:3000'
     volumes:
       - ./backend:/app
+      - /app/node_modules
     networks:
       - app
 
@@ -51,6 +52,7 @@ services:
       - '80:3001'
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     stdin_open: true
 
 volumes:

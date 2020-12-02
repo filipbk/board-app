@@ -1,37 +1,47 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {User} from './user.entity';
-import {UserRepository} from './user.repository';
-import {Provider} from '../auth/provider';
-import {Role} from '../auth/role';
-import {UserDto} from "./user.dto";
+import { Injectable, Scope, Inject, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './user.entity';
+import { UserRepository } from './user.repository';
+import { Provider } from '../auth/provider';
+import { Role } from '../auth/role';
+import TokenUserData from '../auth/token-user-data';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: UserRepository,
+    @Inject(REQUEST) private readonly request: Request,
   ) {}
 
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
-  async getUser(_id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne({
-      select: ['id', 'firstName', 'lastName', 'email'],
-      where: [{ id: _id }],
-    });
+  async getUser(id: number): Promise<User | undefined> {
+    return this.usersRepository.findOne({ id });
   }
 
-  updateUser(user: User, id: number, currentUser: User) {
-    if (id !== user.id) {
-      throw new BadRequestException({message: 'id mismatch'} );
+  updateUser(user: User, requestedUserId: number) {
+    const currentUser = this.request.user as TokenUserData;
+
+    if (requestedUserId !== user.id) {
+      throw new NotFoundException({
+        message: 'Resource with given id does not exist!',
+      });
     }
 
-    if (currentUser.roles.includes(Role.USER)) {
-      if (currentUser.id !== user.id) {
-        throw new BadRequestException({message: 'id mismatch'} );
+    switch (currentUser.role) {
+      case Role.USER: {
+        if (currentUser.id !== user.id) {
+          throw new NotFoundException({
+            message: 'Resource with given id does not exist!',
+          });
+        }
       }
+      default:
+        break;
     }
 
     return this.usersRepository.save(user);
@@ -66,7 +76,11 @@ export class UsersService {
     provider: Provider,
     email: string,
   ): Promise<User> {
-    const user = new User({thirdPartyId, provider, email});
-    return this.usersRepository.save({ ...user, roles: [Role.USER] });
+    return this.usersRepository.save({
+      thirdPartyId,
+      provider,
+      email,
+      roles: [Role.USER],
+    });
   }
 }

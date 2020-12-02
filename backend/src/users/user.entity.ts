@@ -12,16 +12,21 @@ export class User extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @IsNumber() @IsOptional() id!: number;
+  @IsNumber()
+  @IsOptional()
+  id!: number;
 
   @Column({ length: 255 })
-  @IsString() email!: string;
+  @IsString()
+  email!: string;
 
   @Column({ length: 255, nullable: true })
-  @IsString() firstName?: string;
+  @IsString()
+  firstName?: string;
 
   @Column({ length: 255, nullable: true })
-  @IsString() lastName?: string;
+  @IsString()
+  lastName?: string;
 
   @Exclude()
   @Column()
@@ -36,6 +41,6 @@ export class User extends BaseEntity {
   enabled!: boolean;
 
   @Exclude()
-  @Column({ type: 'simple-array' })
-  roles!: Role[];
+  @Column()
+  role!: Role;
 }
