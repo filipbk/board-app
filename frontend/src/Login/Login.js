@@ -73,7 +73,6 @@ export class Login extends React.Component {
       <div className='form-wrapper'>
         <Form className='login-form' onFinish={() => this.register()}>
           <Form.Item
-            id='firstName'
             name='firstName'
             rules={[
               {
@@ -83,12 +82,12 @@ export class Login extends React.Component {
             ]}
           >
             <Input
+              id='firstName'
               placeholder='Name'
               onChange={(e) => this.setState({firstName: e.target.value})}
             />
           </Form.Item>
           <Form.Item
-            id='lastName'
             name='lastName'
             rules={[
               {
@@ -98,6 +97,7 @@ export class Login extends React.Component {
             ]}
           >
             <Input
+              id='lastName'
               placeholder='Last name'
               onChange={(e) => this.setState({lastName: e.target.value})}
             />

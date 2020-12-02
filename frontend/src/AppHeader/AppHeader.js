@@ -50,7 +50,7 @@ export class AppHeader extends React.Component {
         <Button
           type='link'
           onClick={this.redirectToGoogleAuth}
-          className='logout-btn'
+          className='login-btn'
         >
           Log in with Google
         </Button>

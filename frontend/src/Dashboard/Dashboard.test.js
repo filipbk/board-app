@@ -33,7 +33,7 @@ describe('LoginFailure', () => {
   });
 
   it('shows spinner when loading data', () => {
-    const dashboard = mount(<Dashboard />);
+    const dashboard = shallow(<Dashboard />);
     dashboard.setState({isLoading: true});
 
     expect(dashboard.find(Spin).length).toEqual(1);

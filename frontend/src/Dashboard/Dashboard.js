@@ -3,7 +3,6 @@ import {Card, Col, notification, Row, Spin, Typography} from 'antd';
 import {Layout} from 'antd';
 import './Dashboard.css';
 import {categoriesService} from '../services';
-const {Meta} = Card;
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -30,26 +29,39 @@ export class Dashboard extends React.Component {
       .catch((error) => {
         notification.error({
           message: 'Error',
-          description: error
+          description: error.message || error
         });
         this.setState({isLoading: false});
       });
   }
 
   getCategoriesCards() {
+    const {Meta} = Card;
     const {categories} = this.state;
 
-    return categories.map((item, key) => (
-      <Col span={{xs: 2, sm: 6, md: 8, lg: 10}} key={key}>
-        <Card
-          className='announcement-card'
-          hoverable
-          cover={<img alt='example' src={item.imageUrl} />}
-        >
-          <Meta title={item.name} />
-        </Card>
-      </Col>
-    ));
+    return categories
+      .sort(this.sortCategoriesAlphabetically)
+      .map((item, key) => (
+        <Col key={key}>
+          <Card
+            className='announcement-card'
+            hoverable
+            cover={<img alt='example' src={item.imageUrl} />}
+          >
+            <Meta title={item.name} />
+          </Card>
+        </Col>
+      ));
+  }
+
+  sortCategoriesAlphabetically(firstItem, secondItem) {
+    if (firstItem.name < secondItem.name) {
+      return -1;
+    }
+    if (firstItem.name > secondItem.name) {
+      return 1;
+    }
+    return 0;
   }
 
   render() {

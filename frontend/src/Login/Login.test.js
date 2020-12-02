@@ -32,12 +32,15 @@ describe('Login', () => {
 
   it('register function is called after form submitting', () => {
     const updateUserSpy = jest.spyOn(usersService, 'updateUser');
-    const input = login.find(Input);
     const spy = jest.spyOn(login.instance(), 'register');
 
     login.setState({currentUser: {id: 5, enabled: true}});
-    input.at(0).simulate('change', {target: {name: 'firstName', value: 'a'}});
-    input.at(1).simulate('change', {target: {name: 'lastName', value: 'b'}});
+    login
+      .find('#firstName')
+      .simulate('change', {target: {name: 'firstName', value: 'a'}});
+    login
+      .find('#lastName')
+      .simulate('change', {target: {name: 'lastName', value: 'b'}});
     login.find('.login-form').simulate('finish');
 
     expect(spy).toHaveBeenCalled();
