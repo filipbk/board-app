@@ -1,0 +1,21 @@
+.form-wrapper {
+  padding: 20vh 1vw;
+  width: 40%;
+  margin: 0 auto;
+  background-color: #e8e8e8;
+  border-radius: 2px;
+}
+
+.form-wrapper .login-btn-wrapper {
+  margin-bottom: 0;
+}
+
+.form-wrapper .login-btn-wrapper button {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form-wrapper {
+    width: 95%;
+  }
+}
