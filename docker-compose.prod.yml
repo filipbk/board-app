@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8.0.20
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: board
+    ports:
+      - '3306:3306'
+    volumes:
+      - db_volume:/var/lib/mysql
+    networks:
+      - app
+
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile.prod
+    env_file:
+      - api/.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '3000:3000'
+    networks:
+      - app
+
+  dashboard:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.prod
+    env_file:
+      - frontend/.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '80:80'
+
+volumes:
+  db_volume:
+
+networks:
+  app:

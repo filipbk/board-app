@@ -1,0 +1,21 @@
+FROM node:12.16.3-alpine as builder
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --silent
+
+COPY . ./
+RUN npm run build
+
+
+FROM nginx:stable-alpine
+
+COPY --from=builder /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
