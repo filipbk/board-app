@@ -16,7 +16,7 @@ describe('AppHeader', () => {
     expect(appHeader.find(Link).at(0).text()).toEqual('Board App');
   });
 
-  test('renders app header for logged in user', () => {
+  it('renders app header for logged in user', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
       .mockImplementation(() =>
@@ -31,7 +31,7 @@ describe('AppHeader', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  test('renders app header for not logged in user', () => {
+  it('renders app header for not logged in user', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
       .mockImplementation(() => new BehaviorSubject(null).asObservable());

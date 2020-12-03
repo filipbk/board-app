@@ -73,10 +73,7 @@ class Login extends React.Component {
     );
   }
 
-  login() {
-    const {username, password} = this.state;
-    console.log(username, password);
-  }
+  login() {}
 }
 
 export {Login};
