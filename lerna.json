@@ -1,6 +1,6 @@
 {
   "packages": [
-    "api",
+    "backend",
     "frontend"
   ],
   "version": "independent"
