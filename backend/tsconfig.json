@@ -11,8 +11,8 @@
     "baseUrl": "./",
     "incremental": true,
     "strict": true,
-    "noImplicitAny": false,
-    "strictPropertyInitialization": false
+    "noImplicitAny": true,
+    "strictPropertyInitialization": true
   },
   "exclude": ["node_modules", "dist"]
 }
