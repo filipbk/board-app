@@ -25,16 +25,16 @@ services:
 
   api:
     build:
-      context: api
+      context: backend
       dockerfile: Dockerfile.dev
     env_file:
-      - api/.env
+      - backend/.env
     environment:
       - NODE_ENV=development
     ports:
       - '3000:3000'
     volumes:
-      - ./api:/app
+      - ./backend:/app
     networks:
       - app
 

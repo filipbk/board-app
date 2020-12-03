@@ -16,10 +16,10 @@ services:
 
   api:
     build:
-      context: api
+      context: backend
       dockerfile: Dockerfile.prod
     env_file:
-      - api/.env
+      - backend/.env
     environment:
       - NODE_ENV=production
     ports:
