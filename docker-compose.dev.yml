@@ -28,7 +28,7 @@ services:
       context: backend
       dockerfile: Dockerfile.dev
     env_file:
-      - backend/.env
+      - backend/development.env
     environment:
       - NODE_ENV=development
     ports:

@@ -19,7 +19,7 @@ services:
       context: backend
       dockerfile: Dockerfile.prod
     env_file:
-      - backend/.env
+      - backend/production.env
     environment:
       - NODE_ENV=production
     ports:
