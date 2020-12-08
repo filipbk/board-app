@@ -5,9 +5,15 @@ import './OfferItem.css';
 export function OfferItem(props) {
   return (
     <Card>
-      <Col gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+      <Col
+        gutter={{xs: 8, sm: 16, md: 24, lg: 32}}
+        flex={5}
+        justify='space-between'
+      >
         <Row className='gutter-row' span={4}>
-          <img className='photo' src={props.img} alt='Offer' />
+          <div className='crop'>
+            <img src={props.thumbnail} alt='Offer' />
+          </div>
         </Row>
         <Row className='gutter-row' span={4}>
           <Typography.Title className='title' level={4} strong>
