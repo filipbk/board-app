@@ -6,6 +6,7 @@ import {Switch, Route} from 'react-router-dom';
 import {AppHeader} from './AppHeader';
 import {NotFound} from './NotFound';
 import {Dashboard} from './Dashboard';
+import {OfferList} from './Offers';
 
 export class App extends React.Component {
   render() {
@@ -17,6 +18,7 @@ export class App extends React.Component {
             <Route exact path='/' component={Dashboard} />
             <Route exact path='/login/success/:token' component={Login} />
             <Route exact path='/login/failure' component={LoginFailure} />
+            <Route exact path='/offers' component={OfferList} />
             <Route component={NotFound} />
           </Switch>
         </Layout.Content>

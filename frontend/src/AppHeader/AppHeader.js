@@ -78,6 +78,10 @@ export class AppHeader extends React.Component {
           mode='horizontal'
           selectedKeys={[history.location.pathname]}
         >
+          <Menu.Item key='offers'>
+            Offers
+            <Link to='/offers' />
+          </Menu.Item>
           {menuItems}
         </Menu>
       </Layout.Header>
