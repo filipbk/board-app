@@ -1,4 +1,12 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Res,
+  UseGuards,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { Provider } from './provider';
@@ -28,5 +36,10 @@ export class AuthController {
     } else {
       return res.redirect(`${dashboardUrl}/login/failure`);
     }
+  }
+
+  @Post('token/admin')
+  addOperator(@Body('token') token: string, @Body('email') email: string) {
+    return this.userService.applyAdminToken(email, token);
   }
 }

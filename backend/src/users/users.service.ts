@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
@@ -6,10 +6,13 @@ import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
+import { AppSettingsService } from 'src/app-settings/app-settings.service';
 
 export class UsersService {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: UserRepository,
+    @InjectRepository(User)
+    private readonly usersRepository: UserRepository,
+    private readonly appSettingsService: AppSettingsService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -86,5 +89,29 @@ export class UsersService {
       email,
       roles: [Role.USER],
     });
+  }
+
+  getUsersCount(): Promise<number> {
+    return this.usersRepository.count();
+  }
+
+  async applyAdminToken(email: string, token: string) {
+    if (!(await this.appSettingsService.validateOperatorToken(token))) {
+      throw new BadRequestException('Invalid admin token!');
+    }
+
+    const user = await this.usersRepository.findOne({ email });
+
+    if (!user) {
+      throw new BadRequestException('User does not exist!');
+    }
+
+    user.enabled = true;
+    user.role = Role.ADMIN;
+    await this.usersRepository.save(user);
+
+    this.appSettingsService.markAdminTokenAsUsed();
+
+    return { message: 'Token successfully applied!' };
   }
 }
