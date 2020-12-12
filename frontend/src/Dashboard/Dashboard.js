@@ -1,6 +1,6 @@
-import React from 'react';
-import {Card, Col, notification, Row, Spin, Typography} from 'antd';
-import {Layout} from 'antd';
+import React, {Fragment} from 'react';
+import {Card, notification, Spin, Typography} from 'antd';
+import {Layout, List} from 'antd';
 import {Link} from 'react-router-dom';
 import './Dashboard.css';
 import {authenticationService, categoriesService} from '../services';
@@ -51,27 +51,26 @@ export class Dashboard extends React.Component {
     const {Meta} = Card;
     const {categories} = this.state;
 
-    return categories
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((item, key) => (
-        <Col key={key} span={3}>
-          <Link to={`/offers?cat=${item.name}`}>
-            <Card
-              className='announcement-card'
-              hoverable
-              cover={<img alt='example' src={item.imageUrl} />}
-              style={{textAlign: 'center'}}
-            >
-              <Meta title={item.name} />
-            </Card>
-          </Link>
-        </Col>
-      ));
+    return categories.map((item) => (
+      <Fragment key={`category-${item.name}`}>
+        <Link to={`/offers?cat=${item.name}`}>
+          <Card
+            className='announcement-card'
+            hoverable
+            cover={<img alt='example' src={item.imageUrl} style={{padding: '1em 1em 0em 1em'}} />}
+            style={{textAlign: 'center'}}
+          >
+            <Meta title={item.name} />
+          </Card>
+        </Link>
+      </Fragment>
+    ));
   }
 
   render() {
     const {isLoading} = this.state;
     const announcementsCards = this.getCategoriesCards();
+    console.log({announcementsCards});
 
     return (
       <>
@@ -83,9 +82,12 @@ export class Dashboard extends React.Component {
           {isLoading ? (
             <Spin size='large' />
           ) : (
-            <Row gutter={[16, 16]} justify='space-between'>
-              {announcementsCards}
-            </Row>
+            <List
+              grid={{gutter: 24, xs: 1, sm: 2, md: 4, lg: 4, xl: 8}}
+              dataSource={announcementsCards}
+              style={{marginLeft: '5em', marginRight: '5em'}}
+              renderItem={(category) => <List.Item>{category}</List.Item>}
+            />
           )}
         </Layout>
         {authenticationService.currentUserHasRole(UserRoles.USER) ? (
