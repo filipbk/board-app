@@ -31,7 +31,7 @@ describe('AuthorComments', () => {
             },
             toWho: {
               id: 13,
-              email: 'filipp973@gmail.com',
+              email: 'f@gmail.com',
               firstName: 'A',
               lastName: 'B'
             }
@@ -47,7 +47,7 @@ describe('AuthorComments', () => {
             },
             author: {
               id: 13,
-              email: 'filipp973@gmail.com',
+              email: 'f@gmail.com',
               firstName: 'A',
               lastName: 'B'
             }
@@ -67,7 +67,7 @@ describe('AuthorComments', () => {
             },
             toWho: {
               id: 13,
-              email: 'filipp973@gmail.com',
+              email: 'f@gmail.com',
               firstName: 'A',
               lastName: 'B'
             }
@@ -83,7 +83,7 @@ describe('AuthorComments', () => {
             },
             author: {
               id: 13,
-              email: 'filipp973@gmail.com',
+              email: 'f@gmail.com',
               firstName: 'A',
               lastName: 'B'
             }
