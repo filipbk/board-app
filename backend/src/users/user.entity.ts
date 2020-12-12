@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
@@ -48,7 +48,7 @@ export class User extends Base {
   @Column({ default: false })
   enabled!: boolean;
 
-  @Exclude()
+  @Expose({ groups: [Role.ADMIN] })
   @Column({ default: Role.USER })
   role!: Role;
 }

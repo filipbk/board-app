@@ -27,6 +27,7 @@ import { UserDto } from './user.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import TokenUserData from '../auth/token-user-data';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { classToPlain, plainToClass } from 'class-transformer';
 
 @Crud({
   model: {
@@ -46,9 +47,14 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard, ActiveGuard)
-  @Get(':id')
-  get(@Param('id') id: number) {
-    return this.service.getUser(id);
+  @Get(':userId')
+  async get(
+    @Param('userId', new ParseIntPipe()) userId: number,
+    @CurrentUser() currentUser: TokenUserData,
+  ): Promise<Partial<User>> {
+    const user = await this.service.getUser(userId, currentUser);
+
+    return classToPlain(user, { groups: [currentUser.role] });
   }
 
   @Roles(Role.ADMIN)
@@ -65,8 +71,11 @@ export class UsersController {
     @Body() userDto: UserDto,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    const updatedUser = new User(userDto);
-    return this.service.updateUser(updatedUser, id, currentUser);
+    const user = plainToClass(User, classToPlain(userDto), {
+      groups: [currentUser.role],
+    });
+
+    return this.service.updateUser(user, id, currentUser);
   }
 
   @Roles(Role.ADMIN)

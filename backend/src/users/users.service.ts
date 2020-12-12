@@ -31,8 +31,17 @@ export class UsersService extends TypeOrmCrudService<User> {
     return await this.usersRepository.find();
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne({ id });
+  async getUser(
+    userId: number,
+    currentUser: TokenUserData,
+  ): Promise<User | undefined> {
+    if (userId === currentUser.id || currentUser.role === Role.ADMIN) {
+      return this.usersRepository.findOne({ id: userId });
+    }
+
+    throw new NotFoundException({
+      message: 'Resource with given id does not exist!',
+    });
   }
 
   updateUser(user: User, requestedUserId: number, currentUser: TokenUserData) {
