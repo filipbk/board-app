@@ -1,16 +1,16 @@
-import {IsNumber, IsOptional, IsString} from "class-validator";
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CommentCreateDto {
-    @IsNumber()
-    @IsOptional()
-    id!: number;
+  @IsNumber()
+  @IsOptional()
+  id!: number;
 
-    @IsString()
-    content!: string;
+  @IsString()
+  content!: string;
 
-    @IsNumber()
-    toWhoId!: number;
+  @IsNumber()
+  toWhoId!: number;
 
-    @IsNumber()
-    offerId!: number;
+  @IsNumber()
+  offerId!: number;
 }
