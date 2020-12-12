@@ -2,7 +2,8 @@ import React from 'react';
 import {Card, Col, notification, Row, Spin, Typography} from 'antd';
 import {Layout} from 'antd';
 import './Dashboard.css';
-import {categoriesService} from '../services';
+import {authenticationService, categoriesService} from '../services';
+import {history} from '../util';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -15,7 +16,16 @@ export class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    this.checkUserPermissions();
     this.fetchCategories();
+  }
+
+  checkUserPermissions() {
+    const user = authenticationService.currentUserValue();
+
+    if (user && !user.enabled) {
+      history.push(`/login/success/${authenticationService.getUserToken()}`);
+    }
   }
 
   fetchCategories() {
