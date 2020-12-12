@@ -9,18 +9,26 @@
 - docker
 - docker-compose
 - make
-- node
+- node v12.18.0
 
-## Docker development
-
-`Lerna` is used for managing precommit in monorepo. Formatting and linting job is added as a precommit hook.
-To enable that run the command below in the root path:
+To enable precommit hooks in monorepo run the command below in the root path:
 
 ```bash
 npm ci
 ```
 
-Setup api environment variables in [.env](./api/.env)
+To get all the available make commands with description use:
+
+```bash
+make help
+```
+
+## Docker development
+
+### Development version
+
+Setup api environment variables in [.env](./backend/.env)
+Templates from files [dev.env](./backend/dev.env), [production.env](./backend/production.env)
 
 Setup dashboard environment variables in [.env](./frontend/.env)
 
@@ -30,25 +38,33 @@ Run all containers in development mode with:
 make start-dev
 ```
 
+Prepare db structure:
+
+```bash
+make prepare-dev-db
+```
+
 Run all tests with:
 
 ```bash
 make test
 ```
 
-To get all the available commands with description use:
+### Production version
+
+Run all containers in production mode with:
 
 ```bash
-make help
+make start-prod
+```
+
+Prepare db structure:
+
+```bash
+make prepare-prod-db
 ```
 
 ## Local development
-
-To enable precommit hooks in monorepo run the command below in the root path:
-
-```bash
-npm ci
-```
 
 ### Dashboard
 
@@ -74,12 +90,21 @@ npm start
 
 ### Api
 
-Start mysql database instance.
+Setup api environment variables in [.env](./backend/.env)
+Templates from files [local.env](./backend/local.env), [heroku.env](./backend/heroku.env)
 
-To start dashboard go to `frontend` directory.
+Make sure all the environmental variables have correct values.
+
+If a local database prepare it by running the following command in the root directory.
 
 ```bash
-cd frontend
+make prepare-prod-db
+```
+
+To start dashboard go to `backend` directory.
+
+```bash
+cd backend
 ```
 
 Install dependencies with:
@@ -88,11 +113,33 @@ Install dependencies with:
 npm ci
 ```
 
-Create `.env` file from `local.env`.
-Make sure all the envs have correct values.
-
 Run app with:
 
 ```bash
 npm run start:dev
 ```
+
+## Initializing the first admin user
+
+1. After starting the api for the first time an admin token is visible in the stdout (api logs).
+2. Save the token.
+3. Visit the dashboard on `localhost` and log in.
+4. Send a POST request to `${API_URL}/auth/token/admin` endpoint with the following json body:
+```json
+{
+    "token": "$ADMIN_TOKEN",
+    "email": "$USER_EMAIL"
+}
+```
+replacing variables with proper values.
+
+Example:
+```bash
+curl --location --request POST 'localhost:3000/auth/token/admin' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "your-email@gmail.com",
+    "token": "an-admin-token"
+}'
+```
+5. Login again to the dashboard and Your account now has admin privileges

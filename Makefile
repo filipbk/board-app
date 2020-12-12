@@ -1,3 +1,6 @@
+include backend/.env
+export $(shell sed 's/=.*//' backend/.env)
+
 help:
 	@grep -P '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -32,3 +35,9 @@ test-dashboard: ## Run all dashboard tests
 	docker-compose -f docker-compose.dev.yml exec -w /app dashboard bash -c 'CI=true npm test'
 
 test: test-api test-dashboard
+
+prepare-dev-db:
+	docker-compose -f docker-compose.dev.yml exec -T mysql mysql -u ${DATABASE_USERNAME} -p${DATABASE_PASSWORD} '${DATABASE_NAME}' < ./scripts/prepare-db.sql
+
+prepare-dev-db:
+	docker-compose -f docker-compose.prod.yml exec -T mysql mysql -u ${DATABASE_USERNAME} -p${DATABASE_PASSWORD} '${DATABASE_NAME}' < ./scripts/prepare-db.sql
