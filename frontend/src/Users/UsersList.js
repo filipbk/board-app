@@ -5,7 +5,7 @@ import {UsersTable} from './UsersTable';
 
 const PAGE_SIZE = 10;
 
-export function UsersList() {
+export function UsersList(props) {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [totalUsersCount, setTotalUsersCount] = useState(0);
@@ -51,6 +51,7 @@ export function UsersList() {
   return (
     <Fragment>
       <UsersTable
+        {...props}
         data={users}
         page={page}
         pageSize={PAGE_SIZE}

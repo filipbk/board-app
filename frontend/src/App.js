@@ -9,7 +9,8 @@ import {Dashboard} from './Dashboard';
 import {OfferList} from './Offers';
 import {PrivateRoute} from './util';
 import {AddOffer, EditOffer, Offer} from './Offer';
-import {UsersList} from './Users/UsersList';
+import {UserRoles} from './constants/UserRoles';
+import {UserEdit, UsersList} from './Users';
 
 export class App extends React.Component {
   render() {
@@ -25,7 +26,18 @@ export class App extends React.Component {
             <PrivateRoute exact path='/offer/add' component={AddOffer} />
             <PrivateRoute exact path='/offer/edit/:id' component={EditOffer} />
             <Route exact path='/offer/:id' component={Offer} />
-            <PrivateRoute exact path='/users' component={UsersList} />
+            <PrivateRoute
+              exact
+              path='/users'
+              requiredRole={UserRoles.ADMIN}
+              component={UsersList}
+            />
+            <PrivateRoute
+              exact
+              path='/users/:id'
+              requiredRole={UserRoles.ADMIN}
+              component={UserEdit}
+            />
             <Route component={NotFound} />
           </Switch>
         </Layout.Content>

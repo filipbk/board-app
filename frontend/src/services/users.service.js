@@ -10,6 +10,14 @@ class UsersService {
     }).then(handleResponse);
   }
 
+  getUser(id) {
+    const url = `${process.env.REACT_APP_API_URL}/users/${id}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: authenticationHeader()
+    }).then(handleResponse);
+  }
+
   updateUser(userBody, id) {
     const url = process.env.REACT_APP_API_URL;
     return fetch(`${url}/users/${id}`, {

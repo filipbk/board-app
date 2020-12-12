@@ -72,8 +72,8 @@ export function UsersTable(props) {
     },
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name'
+      dataIndex: 'fullName',
+      key: 'fullName'
     },
     {
       title: 'Enabled',
@@ -97,6 +97,13 @@ export function UsersTable(props) {
         showTotal: (total) => `Total ${total} items`,
         onChange: onPageChange
       }}
-    ></Table>
+      onRow={(record) => {
+        return {
+          onClick: () => {
+            props.history.push(`/users/${record.id}`);
+          }
+        };
+      }}
+    />
   );
 }
