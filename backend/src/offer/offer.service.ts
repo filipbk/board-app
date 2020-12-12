@@ -51,6 +51,7 @@ export class OfferService {
     })) as Category;
     userOffer.money = offerDto.money;
     userOffer.image = offerDto.image;
+    userOffer.version = offerDto.version;
 
     return this.offerRepository.save(userOffer);
   }
