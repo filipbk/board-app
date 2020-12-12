@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { OfferModule } from './offer/offer.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { AppSettingsModule } from './app-settings/app-settings.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './files',
     }),
+    AppSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

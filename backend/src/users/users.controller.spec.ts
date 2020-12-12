@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './user.entity';
+import { AppSettingsService } from '../app-settings/app-settings.service';
+import { AppSettings } from '../app-settings/app-settings.entity';
 
 describe('Users Controller', () => {
   let controller: UsersController;
@@ -9,10 +13,16 @@ describe('Users Controller', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [
+        { provide: UsersService, useClass: jest.fn() },
         {
-          provide: UsersService,
-          useFactory: jest.fn(),
+          provide: getRepositoryToken(User),
+          useClass: jest.fn(),
         },
+        {
+          provide: getRepositoryToken(AppSettings),
+          useClass: jest.fn(),
+        },
+        { provide: AppSettingsService, useClass: jest.fn() },
       ],
     }).compile();
 
