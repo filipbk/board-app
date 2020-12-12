@@ -1,4 +1,9 @@
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  NotFoundException,
+  BadRequestException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
@@ -6,13 +11,14 @@ import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
-import { AppSettingsService } from 'src/app-settings/app-settings.service';
+import { AppSettingsService } from '../app-settings/app-settings.service';
 
 export class UsersService {
   constructor(
+    @Inject(forwardRef(() => AppSettingsService))
+    private readonly appSettingsService: AppSettingsService,
     @InjectRepository(User)
     private readonly usersRepository: UserRepository,
-    private readonly appSettingsService: AppSettingsService,
   ) {}
 
   async getUsers(): Promise<User[]> {

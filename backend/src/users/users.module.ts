@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import { AppSettingsModule } from 'src/app-settings/app-settings.module';
+import { AppSettingsModule } from '../app-settings/app-settings.module';
 
 @Module({
   imports: [
