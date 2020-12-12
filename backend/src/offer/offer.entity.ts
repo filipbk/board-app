@@ -26,12 +26,12 @@ export class Offer extends Base {
   city!: string;
 
   @ManyToOne(
-    type => User,
+    () => User,
     user => user.offers,
   )
   author!: User;
 
-  @ManyToOne(type => Category)
+  @ManyToOne(() => Category)
   category!: Category;
 
   @Column({ nullable: true, default: 0 })

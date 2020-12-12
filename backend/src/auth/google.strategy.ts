@@ -9,7 +9,7 @@ import { Provider } from './provider';
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
     private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    readonly configService: ConfigService,
   ) {
     super({
       clientID: configService.get('GOOGLE_OAUTH_CLIENT_ID'),

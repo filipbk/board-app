@@ -3,6 +3,7 @@ import {authenticationService, offersService} from '../services';
 import {notification, Spin} from 'antd';
 import {OfferForm} from './OfferForm';
 import {history} from '../util';
+import {UserRoles} from '../constants/UserRoles';
 
 export class EditOffer extends React.Component {
   constructor(props) {
@@ -44,7 +45,12 @@ export class EditOffer extends React.Component {
   }
 
   checkUserPermissions(authorId) {
-    if (authorId !== authenticationService.currentUserValue().id) {
+    if (
+      !(
+        authorId === authenticationService.currentUserValue().id ||
+        authenticationService.currentUserHasRole(UserRoles.ADMIN)
+      )
+    ) {
       this.showErrorMessage("You can't edit requested offer");
       history.push('/');
     }

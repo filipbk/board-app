@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import './Dashboard.css';
 import {authenticationService, categoriesService} from '../services';
 import {history} from '../util';
+import {UserRoles} from '../constants/UserRoles';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -87,7 +88,7 @@ export class Dashboard extends React.Component {
             </Row>
           )}
         </Layout>
-        {authenticationService.currentUserValue() ? (
+        {authenticationService.currentUserHasRole(UserRoles.USER) ? (
           <Link to='/offer/add' className='add-offer-link'>
             Add new offer
           </Link>

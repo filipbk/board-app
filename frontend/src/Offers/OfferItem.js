@@ -5,6 +5,14 @@ import './OfferItem.css';
 export function OfferItem(props) {
   const url = process.env.REACT_APP_API_URL;
 
+  const getFormattedPrice = (price) => {
+    if (price) {
+      return `${price.toFixed(2)} zł`;
+    }
+
+    return 'FREE';
+  };
+
   return (
     <Card>
       <Col gutter={{xs: 8, sm: 16, md: 24, lg: 32}} flex={5} justify='space-between'>
@@ -44,10 +52,9 @@ export function OfferItem(props) {
         </Row>
         <Row className='gutter-row' span={4}>
           <div>
-            <span
-              id={`offer-${props.id}-price`}
-              style={{fontWeight: 'bold'}}
-            >{`${props.money.toFixed(2)} zł`}</span>
+            <span id={`offer-${props.id}-price`} style={{fontWeight: 'bold'}}>
+              {getFormattedPrice(props.money)}
+            </span>
           </div>
         </Row>
       </Col>

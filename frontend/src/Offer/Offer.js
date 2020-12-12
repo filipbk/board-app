@@ -3,6 +3,7 @@ import {authenticationService, offersService} from '../services';
 import {Col, notification, Row, Spin, Typography, Button} from 'antd';
 import {Link, Redirect} from 'react-router-dom';
 import {history} from '../util';
+import {UserRoles} from '../constants/UserRoles';
 
 export class Offer extends React.Component {
   constructor(props) {
@@ -53,6 +54,24 @@ export class Offer extends React.Component {
       );
   }
 
+  hasEditPermissions() {
+    const {offerData} = this.state;
+
+    const isCurrentUserAuthor =
+      authenticationService.currentUserValue() &&
+      authenticationService.currentUserValue().id === offerData.author.id;
+
+    return isCurrentUserAuthor || authenticationService.currentUserHasRole(UserRoles.ADMIN);
+  }
+
+  getFormattedPrice(price) {
+    if (price) {
+      return `${price.toFixed(2)} zł`;
+    }
+
+    return 'FREE';
+  }
+
   render() {
     const {offerData, isLoading} = this.state;
     const url = process.env.REACT_APP_API_URL;
@@ -72,8 +91,7 @@ export class Offer extends React.Component {
         </Typography.Title>
         <Row gutter={4}>
           <Col span={12} className='offer-info'>
-            {authenticationService.currentUserValue() &&
-            authenticationService.currentUserValue().id === offerData.author.id ? (
+            {this.hasEditPermissions() ? (
               <Row gutter={4} className='btns-container'>
                 <Col span={12}>
                   <Link
@@ -105,7 +123,7 @@ export class Offer extends React.Component {
             <Typography.Text>{offerData.city}</Typography.Text>
             <br />
             <Typography.Text strong={true}>Price:</Typography.Text>{' '}
-            <Typography.Text>{`${offerData.money.toFixed(2)} zł`}</Typography.Text>
+            <Typography.Text>{this.getFormattedPrice(offerData.money)}</Typography.Text>
             <br />
             <Typography.Text strong={true}>Description:</Typography.Text>{' '}
             <Typography.Text>{offerData.description}</Typography.Text>
@@ -113,7 +131,11 @@ export class Offer extends React.Component {
           </Col>
           <Col span={12}>
             {offerData.image ? (
-              <img className='offer-photo' src={`${url}/offers/photo/${offerData.image}`} />
+              <img
+                className='offer-photo'
+                src={`${url}/offers/photo/${offerData.image}`}
+                alt='Item offer'
+              />
             ) : null}
           </Col>
         </Row>

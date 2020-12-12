@@ -10,14 +10,10 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { Provider } from './provider';
-import { UsersService } from '../users/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly userService: UsersService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @Get(Provider.GOOGLE)
   @UseGuards(AuthGuard(Provider.GOOGLE))

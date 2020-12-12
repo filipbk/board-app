@@ -36,7 +36,7 @@ export class User extends BaseEntity {
   lastName?: string;
 
   @OneToMany(
-    type => Offer,
+    () => Offer,
     offer => offer.author,
     { cascade: ['insert', 'update'] },
   )
