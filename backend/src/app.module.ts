@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import databaseConfig from './config/database.config';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
+import { OfferModule } from './offer/offer.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { CategoryModule } from './category/category.module';
     UsersModule,
     AuthModule,
     CategoryModule,
+    OfferModule,
   ],
   controllers: [AppController],
   providers: [AppService],
