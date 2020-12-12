@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Comment, Form, Input, notification} from 'antd';
-import {commentsService} from '../services';
+import {commentsService} from '../../services';
 
 export class NewComment extends React.Component {
   constructor(props) {

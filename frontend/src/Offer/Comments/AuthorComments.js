@@ -1,5 +1,5 @@
 import React from 'react';
-import {authenticationService, commentsService} from '../services';
+import {authenticationService, commentsService} from '../../services';
 import {Typography, Collapse, Comment} from 'antd';
 import {NewComment} from './NewComment';
 

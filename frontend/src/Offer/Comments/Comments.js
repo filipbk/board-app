@@ -1,6 +1,6 @@
 import React from 'react';
 import {Comment, List, Typography} from 'antd';
-import {authenticationService, commentsService} from '../services';
+import {authenticationService, commentsService} from '../../services';
 import {NewComment} from './NewComment';
 
 export class Comments extends React.Component {

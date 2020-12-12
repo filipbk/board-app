@@ -4,8 +4,8 @@ import {Col, notification, Row, Spin, Typography, Button} from 'antd';
 import {Link, Redirect} from 'react-router-dom';
 import {history} from '../util';
 import {UserRoles} from '../constants/UserRoles';
-import {Comments} from './Comments';
-import {AuthorComments} from './AuthorComments';
+import {Comments} from './Comments/Comments';
+import {AuthorComments} from './Comments/AuthorComments';
 
 export class Offer extends React.Component {
   constructor(props) {
