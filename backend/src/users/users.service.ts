@@ -5,6 +5,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { Provider } from '../auth/provider';
@@ -13,20 +14,31 @@ import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
 import { AppSettingsService } from '../app-settings/app-settings.service';
 
-export class UsersService {
+export class UsersService extends TypeOrmCrudService<User> {
   constructor(
+    @InjectRepository(UserRepository)
+    private readonly usersRepository: UserRepository,
     @Inject(forwardRef(() => AppSettingsService))
     private readonly appSettingsService: AppSettingsService,
-    @InjectRepository(User)
-    private readonly usersRepository: UserRepository,
-  ) {}
+  ) {
+    super(usersRepository);
+  }
 
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne({ id });
+  async getUser(
+    userId: number,
+    currentUser: TokenUserData,
+  ): Promise<User | undefined> {
+    if (userId === currentUser.id || currentUser.role === Role.ADMIN) {
+      return this.usersRepository.findOne({ id: userId });
+    }
+
+    throw new NotFoundException({
+      message: 'Resource with given id does not exist!',
+    });
   }
 
   updateUser(user: User, requestedUserId: number, currentUser: TokenUserData) {

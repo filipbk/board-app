@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppSettingsService } from './app-settings.service';
 import { UsersService } from '../users/users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../users/user.entity';
 import { AppSettings } from './app-settings.entity';
 import { AppSettingsRepository } from './app-settings.repository';
 
@@ -13,11 +12,7 @@ describe('AppSettingsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
-        {
-          provide: getRepositoryToken(User),
-          useClass: jest.fn(),
-        },
+        { provide: UsersService, useClass: jest.fn() },
         AppSettingsService,
         {
           provide: getRepositoryToken(AppSettings),

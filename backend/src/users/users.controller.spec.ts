@@ -13,7 +13,7 @@ describe('Users Controller', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [
-        UsersService,
+        { provide: UsersService, useClass: jest.fn() },
         {
           provide: getRepositoryToken(User),
           useClass: jest.fn(),
@@ -22,7 +22,7 @@ describe('Users Controller', () => {
           provide: getRepositoryToken(AppSettings),
           useClass: jest.fn(),
         },
-        AppSettingsService,
+        { provide: AppSettingsService, useClass: jest.fn() },
       ],
     }).compile();
 
