@@ -6,8 +6,9 @@ import {Switch, Route} from 'react-router-dom';
 import {AppHeader} from './AppHeader';
 import {NotFound} from './NotFound';
 import {Dashboard} from './Dashboard';
-import {AddOffer} from "./Offer/OfferForm/AddOffer";
-import {EditOffer} from "./Offer/OfferForm/EditOffer";
+import {AddOffer} from './Offer/OfferForm/AddOffer';
+import {EditOffer} from './Offer/OfferForm/EditOffer';
+import {PrivateRoute} from './util';
 
 export class App extends React.Component {
   render() {
@@ -19,8 +20,8 @@ export class App extends React.Component {
             <Route exact path='/' component={Dashboard} />
             <Route exact path='/login/success/:token' component={Login} />
             <Route exact path='/login/failure' component={LoginFailure} />
-            <Route exact path='/offer/add' component={AddOffer} />
-            <Route exact path='/offer/edit/:id' component={EditOffer} />
+            <PrivateRoute exact path='/offer/add' component={AddOffer} />
+            <PrivateRoute exact path='/offer/edit/:id' component={EditOffer} />
             <Route component={NotFound} />
           </Switch>
         </Layout.Content>
