@@ -1,5 +1,5 @@
 import { IsNumber, IsOptional, IsString, IsEnum } from 'class-validator';
-import { Role } from 'src/auth/role';
+import { Role } from '../auth/role';
 
 export class UserDto {
   @IsNumber()

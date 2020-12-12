@@ -4,7 +4,7 @@ import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import { IsString, IsNumber, IsOptional } from 'class-validator';
 import { Offer } from '../offer/offer.entity';
-import { Base } from 'src/base-entity';
+import { Base } from '../base-entity';
 
 @Entity()
 export class User extends Base {
