@@ -4,6 +4,8 @@ import {Col, notification, Row, Spin, Typography, Button} from 'antd';
 import {Link, Redirect} from 'react-router-dom';
 import {history} from '../util';
 import {UserRoles} from '../constants/UserRoles';
+import {Comments} from './Comments';
+import {AuthorComments} from './AuthorComments';
 
 export class Offer extends React.Component {
   constructor(props) {
@@ -139,6 +141,7 @@ export class Offer extends React.Component {
             ) : null}
           </Col>
         </Row>
+        <Row>{this.hasEditPermissions() ? <AuthorComments offerId={this.props.match.params.id} /> : <Comments offerId={this.props.match.params.id} />}</Row>
       </>
     );
   }
