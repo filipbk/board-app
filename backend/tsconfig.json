@@ -12,8 +12,7 @@
     "incremental": true,
     "strict": true,
     "noImplicitAny": true,
-    "strictPropertyInitialization": true,
-    "noUnusedLocals": true
+    "strictPropertyInitialization": true
   },
   "exclude": ["node_modules", "dist"]
 }

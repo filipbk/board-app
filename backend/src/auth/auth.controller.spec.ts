@@ -13,7 +13,10 @@ describe('Auth Controller', () => {
       controllers: [AuthController],
       providers: [
         ConfigService,
-        UsersService,
+        {
+          provide: UsersService,
+          useClass: jest.fn(),
+        },
         {
           provide: getRepositoryToken(User),
           useClass: jest.fn(),
