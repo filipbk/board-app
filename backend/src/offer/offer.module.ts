@@ -4,9 +4,11 @@ import {OfferRepository} from "./offer.repository";
 import {Offer} from "./offer.entity";
 import {OfferService} from "./offer.service";
 import {OfferController} from "./offer.controller";
+import {UserRepository} from "../users/user.repository";
+import {User} from "../users/user.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Offer, OfferRepository])],
+    imports: [TypeOrmModule.forFeature([Offer, OfferRepository, User, UserRepository])],
     exports: [TypeOrmModule, OfferService],
     providers: [OfferService],
     controllers: [OfferController],
