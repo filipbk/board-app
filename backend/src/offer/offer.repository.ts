@@ -1,10 +1,10 @@
 import {EntityRepository, Repository} from "typeorm";
 import {Offer} from "./offer.entity";
-import {OfferCreateDto} from "./offer.create.dto";
+import {OfferDto} from "./offer.dto";
 
 @EntityRepository(Offer)
 export class OfferRepository extends Repository<Offer> {
-    createOffer = async (createOfferDto: OfferCreateDto) => {
+    createOffer = async (createOfferDto: OfferDto) => {
         return await this.save(createOfferDto);
     };
 }

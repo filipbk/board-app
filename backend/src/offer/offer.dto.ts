@@ -1,8 +1,8 @@
-import {isNotEmpty, IsString} from "class-validator";
+import {IsString} from "class-validator";
 import {Exclude} from "class-transformer";
 import {User} from "../users/user.entity";
 
-export class OfferCreateDto {
+export class OfferDto {
     @IsString()
     title!: string;
 
