@@ -49,6 +49,7 @@ export class Offer extends Base {
   @Column({ length: 999, nullable: true, default: 'unnamed.png' })
   image!: string;
 
-  @VersionColumn() // A versioned entity!
+  @VersionColumn()
+  @IsNumber()
   version!: number;
 }

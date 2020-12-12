@@ -28,5 +28,6 @@ export class OfferDto {
   image!: string;
 
   @IsNumber()
+  @IsOptional()
   version!: number;
 }

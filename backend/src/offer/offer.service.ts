@@ -28,6 +28,7 @@ export class OfferService {
     newOffer.category = (await this.categoryRepository.findOne({
       id: offer.categoryId,
     })) as Category;
+    newOffer.version = 1;
 
     return this.offerRepository.save(newOffer);
   }
