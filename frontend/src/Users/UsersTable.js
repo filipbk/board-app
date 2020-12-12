@@ -13,7 +13,6 @@ export function UsersTable(props) {
     page,
     pageSize,
     onPageChange,
-    onTableChange,
     filters,
     onClearFilters,
     onSearch
@@ -37,7 +36,7 @@ export function UsersTable(props) {
       }
     },
     render: (text) =>
-      filters && filters[dataIndex] ? (
+      filters && filters[dataIndex] && filters[dataIndex].value ? (
         <Highlighter
           highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
           searchWords={[filters[dataIndex].value]}
@@ -54,9 +53,9 @@ export function UsersTable(props) {
     onSearch && onSearch(selectedKeys, dataIndex);
   };
 
-  const handleReset = (clearFilters) => {
+  const handleReset = (clearFilters, dataIndex) => {
     clearFilters();
-    onClearFilters && onClearFilters();
+    onClearFilters && onClearFilters(dataIndex);
   };
 
   const columns = [
@@ -69,7 +68,6 @@ export function UsersTable(props) {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      render: (text) => <a>{text}</a>,
       ...getColumnSearchProps('email')
     },
     {
@@ -99,7 +97,6 @@ export function UsersTable(props) {
         showTotal: (total) => `Total ${total} items`,
         onChange: onPageChange
       }}
-      onChange={onTableChange}
     ></Table>
   );
 }

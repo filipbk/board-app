@@ -34,7 +34,11 @@ export function TableSearchDropdown({
         >
           Search
         </Button>
-        <Button onClick={() => handleReset(clearFilters)} size='small' style={{width: 90}}>
+        <Button
+          onClick={() => handleReset(clearFilters, dataIndex)}
+          size='small'
+          style={{width: 90}}
+        >
           Reset
         </Button>
       </Space>
