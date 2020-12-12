@@ -7,24 +7,13 @@ import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
-import {
-  IPaginationOptions,
-  Pagination,
-  paginate,
-} from 'nestjs-typeorm-paginate';
 
 export class UsersService extends TypeOrmCrudService<User> {
-  getUsersPage(
-    paginationOptions: IPaginationOptions,
-  ): Promise<Pagination<User>> {
-    return paginate<User>(this.usersRepository, paginationOptions);
-  }
   constructor(
-    @InjectRepository(User) repo: any,
     @InjectRepository(UserRepository)
     private readonly usersRepository: UserRepository,
   ) {
-    super(repo);
+    super(usersRepository);
   }
 
   async getUsers(): Promise<User[]> {
