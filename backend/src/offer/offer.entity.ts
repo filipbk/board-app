@@ -1,9 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { IsNumber, IsOptional } from 'class-validator';
 import { User } from '../users/user.entity';
 import { Base } from '../base-entity';
 import { Category } from '../category/category.entity';
-import {Comment} from "../comment/comment.entity";
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Offer extends Base {
@@ -36,9 +42,9 @@ export class Offer extends Base {
   category!: Category;
 
   @OneToMany(
-      () => Comment,
-      comment => comment.offer,
-      { cascade: ['insert', 'update'] },
+    () => Comment,
+    comment => comment.offer,
+    { cascade: ['insert', 'update'] },
   )
   comments!: Comment[];
 

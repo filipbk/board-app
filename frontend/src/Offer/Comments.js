@@ -1,56 +1,67 @@
 import React from 'react';
-import {Comment, List, Typography, Form, Button, Input} from "antd";
-import {authenticationService} from "../services";
+import {Comment, List, Typography} from 'antd';
+import {authenticationService, commentsService} from '../services';
+import {NewComment} from './NewComment';
 
 export class Comments extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      newComment: undefined,
-      comments: [{date: "2020-05-30", author: 'adasd', authorId: 14, content: 'fdsdfggtasda'}, {date: "2020-06-3", author: 'gdfgdfg', authorId: 13, content: 'fdsdfggtasda'}]
-    }
+      comments: []
+    };
+
+    this.addNewCommentToList = this.addNewCommentToList.bind(this);
   }
 
-  addComment() {
-    const {newComment} = this.state
-    const {offerId} = this.props
+  componentDidMount() {
+    this.fetchComments();
+  }
 
-    console.log(offerId, newComment)
+  fetchComments() {
+    const {offerId} = this.props;
+
+    commentsService.getOfferComments(offerId).then((result) => {
+      this.setState({comments: result});
+    });
+  }
+
+  addNewCommentToList(comment) {
+    const {comments} = this.state;
+    this.setState({comments: [...comments, comment]});
   }
 
   render() {
-    const {comments, newComment} = this.state
+    const {comments} = this.state;
+    const {offerId, toWhoId} = this.props;
 
-    return <>
-      {!comments || comments.length === 0 ? <Typography >There are no comments yet</Typography>:
-      <List
-        className="comment-list"
-        header={`${comments.length} comments`}
-        itemLayout="horizontal"
-        dataSource={comments}
-        renderItem={item => (
-          <li>
-            <Comment
-              content={<p>{item.content}</p>} datetime={item.date} author={authenticationService.currentUserValue().id === item.authorId ? "You" : item.author}
-            />
-          </li>
+    return (
+      <>
+        {!comments || comments.length === 0 ? (
+          <Typography>There are no comments yet</Typography>
+        ) : (
+          <List
+            className='comment-list'
+            header={`${comments.length} comments`}
+            itemLayout='horizontal'
+            dataSource={comments}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  content={<p>{item.content}</p>}
+                  datetime={new Date(item.updatedAt).toLocaleString()}
+                  author={
+                    authenticationService.currentUserValue().id === item.author.id
+                      ? 'You'
+                      : `${item.author.firstName} ${item.author.lastName}`
+                  }
+                />
+              </li>
+            )}
+          />
         )}
-      />}
-      <Comment className='new-comment'
-        content={
-          <>
-            <Form.Item>
-              <Input.TextArea rows={4} value={newComment} onChange={e => this.setState({newComment: e.target.value})} />
-            </Form.Item>
-            <Form.Item>
-              <Button htmlType="submit" onClick={() => this.addComment()} type="primary">
-                Add Comment
-              </Button>
-            </Form.Item>
-          </>
-        }
-      />
+        <NewComment addComment={this.addNewCommentToList} offerId={offerId} toWhoId={toWhoId} />
       </>
+    );
   }
 }

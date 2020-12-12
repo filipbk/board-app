@@ -53,7 +53,8 @@ h1.offer-title {
   max-width: 100%;
 }
 
-.comment-list, .new-comment {
+.comment-list,
+.new-comment {
   width: 100%;
 }
 

@@ -74,6 +74,20 @@ export class Offer extends React.Component {
     return 'FREE';
   }
 
+  getCommentsComponent() {
+    const {offerData} = this.state;
+    if (this.hasEditPermissions()) {
+      return <AuthorComments offerId={this.props.match.params.id} />;
+    } else if (authenticationService.currentUserValue()) {
+      return (
+        <Comments
+          toWhoId={offerData.author.id}
+          offerId={parseInt(this.props.match.params.id, 10)}
+        />
+      );
+    }
+  }
+
   render() {
     const {offerData, isLoading} = this.state;
     const url = process.env.REACT_APP_API_URL;
@@ -141,7 +155,7 @@ export class Offer extends React.Component {
             ) : null}
           </Col>
         </Row>
-        <Row>{this.hasEditPermissions() ? <AuthorComments offerId={this.props.match.params.id} /> : <Comments offerId={this.props.match.params.id} />}</Row>
+        <Row>{this.getCommentsComponent()}</Row>
       </>
     );
   }
