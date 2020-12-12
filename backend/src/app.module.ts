@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
 import { OfferModule } from './offer/offer.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { CommentModule } from './comment/comment.module';
+import { OptimisticLockingSubscriber } from './app.optimistic-locking.subscriber';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CommentModule } from './comment/comment.module';
           password: dbSettings.pass,
           database: dbSettings.databaseName,
           entities: ['dist/**/*.entity.js'],
+          subscribers: [OptimisticLockingSubscriber],
           synchronize: true,
         };
       },

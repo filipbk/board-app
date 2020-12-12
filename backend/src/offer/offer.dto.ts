@@ -26,4 +26,8 @@ export class OfferDto {
   @IsOptional()
   @IsString()
   image!: string;
+
+  @IsNumber()
+  @IsOptional()
+  version!: number;
 }

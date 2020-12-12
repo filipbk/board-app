@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  VersionColumn,
 } from 'typeorm';
 import { IsNumber, IsOptional } from 'class-validator';
 import { User } from '../users/user.entity';
@@ -54,4 +55,8 @@ export class Offer extends Base {
 
   @Column({ length: 999, nullable: true, default: 'unnamed.png' })
   image!: string;
+
+  @VersionColumn()
+  @IsNumber()
+  version!: number;
 }

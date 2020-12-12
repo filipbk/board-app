@@ -33,6 +33,7 @@ export class Comment extends Base {
   @ManyToOne(
     () => Offer,
     offer => offer.comments,
+    { onDelete: 'CASCADE' },
   )
   offer!: Offer;
 }
