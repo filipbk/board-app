@@ -1,5 +1,7 @@
 // OptimisticLockVersionMismatchError.ts
-export class OptimisticLockVersionMismatchError extends Error {
+import {UnprocessableEntityException} from "@nestjs/common";
+
+export class OptimisticLockVersionMismatchError extends UnprocessableEntityException {
     name = "OptimisticLockVersionMismatchError";
 
     constructor(entity: string, expectedVersion: number, actualVersion: number) {
