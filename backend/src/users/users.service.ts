@@ -102,7 +102,10 @@ export class UsersService {
   }
 
   async applyAdminToken(email: string, token: string) {
-    if (!(await this.appSettingsService.validateOperatorToken(token))) {
+    const isTokenValid = await this.appSettingsService.validateOperatorToken(
+      token,
+    );
+    if (!isTokenValid) {
       throw new BadRequestException('Invalid admin token!');
     }
 
