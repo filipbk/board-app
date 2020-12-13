@@ -19,7 +19,7 @@ describe('AppHeader', () => {
       .mockImplementation(() => new BehaviorSubject({firstName: 'Bob'}).asObservable());
     const appHeader = shallow(<AppHeader />);
 
-    expect(appHeader.find(Button).at(0).text()).toEqual('Logout');
+    expect(appHeader.find('#logout-button').at(0)).toBeDefined();
     expect(spy).toHaveBeenCalled();
   });
 
@@ -29,7 +29,7 @@ describe('AppHeader', () => {
       .mockImplementation(() => new BehaviorSubject(null).asObservable());
     const appHeader = shallow(<AppHeader />);
 
-    expect(appHeader.find(Button).at(0).text()).toEqual('Log in with Google');
+    expect(appHeader.find('#login-button').at(0)).toBeDefined();
     expect(spy).toHaveBeenCalled();
   });
 

@@ -34,7 +34,7 @@ export class AppHeader extends React.Component {
   getLoggedInUserNavbar() {
     return [
       <Menu.Item key='/logout'>
-        <Button type='link' onClick={() => this.logout()} className='logout-btn'>
+        <Button type='link' id='logout-button' onClick={() => this.logout()} className='logout-btn'>
           <Text style={{fontSize: '14px'}}>Logout</Text>
         </Button>
       </Menu.Item>
@@ -44,8 +44,15 @@ export class AppHeader extends React.Component {
   getNotLoggedInUserNavbar() {
     return [
       <Menu.Item key='/auth/google'>
-        <Button type='link' onClick={this.redirectToGoogleAuth} className='login-btn'>
-          Log in with Google
+        <Button
+          type='link'
+          id='login-button'
+          onClick={this.redirectToGoogleAuth}
+          className='login-btn'
+        >
+          <Text strong style={{fontSize: '16px'}}>
+            Log in with Google
+          </Text>
         </Button>
       </Menu.Item>
     ];

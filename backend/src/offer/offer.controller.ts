@@ -18,13 +18,10 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import TokenUserData from '../auth/token-user-data';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { OfferDto } from './offer.dto';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../auth/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { editFileName } from '../utils/edit-file-name.utils';
 import { imageFileFilter } from '../utils/image-file-filter.utils';
 import { diskStorage } from 'multer';
-import { Request } from 'express';
 
 @Controller('offers')
 export class OfferController {
@@ -49,20 +46,21 @@ export class OfferController {
     return this.service.updateOffer(offerDto, id, currentUser);
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  deleteUser(
+  deleteOffer(
     @Param('id') id: number,
     @CurrentUser() currentUser: TokenUserData,
   ) {
     return this.service.deleteOfferById(id, currentUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/photo')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './files',
+        destination: './public/images',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -75,9 +73,9 @@ export class OfferController {
     };
   }
 
-  @Get('/photo/:imgpath')
-  seeUploadedFile(@Param('imgpath') image: any, @Res() res: any) {
-    return res.sendFile(image, { root: './files' });
+  @Get('/photo/:imgPath')
+  getImage(@Param('imgPath') imagePath: string, @Res() res: any) {
+    return res.sendFile(imagePath, { root: './public/images' });
   }
 
   @Get(':id')

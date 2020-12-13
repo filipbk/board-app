@@ -35,5 +35,5 @@ lerna-debug.log*
 
 .env
 
-files/*
-!files/unnamed.png
+public/images/*
+!public/images/unnamed.png
