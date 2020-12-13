@@ -11,7 +11,7 @@ import {
   Upload
 } from 'antd';
 import './OfferForm.css';
-import {categoriesService} from '../../services';
+import {categoriesService} from '../services';
 
 export class OfferForm extends React.Component {
   constructor(props) {
@@ -128,6 +128,7 @@ export class OfferForm extends React.Component {
               {...layout}
               className=''
               onFinish={(e) => this.onFinish(e)}
+              id='form'
             >
               <Form.Item
                 name='title'

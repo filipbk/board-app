@@ -1,7 +1,7 @@
 import React from 'react';
-import {OfferForm} from './OfferForm';
-import {offersService} from '../../services';
+import {offersService} from '../services';
 import {notification, Spin} from 'antd';
+import {OfferForm} from './OfferForm';
 
 export class EditOffer extends React.Component {
   constructor(props) {

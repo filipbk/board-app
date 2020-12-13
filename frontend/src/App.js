@@ -6,9 +6,8 @@ import {Switch, Route} from 'react-router-dom';
 import {AppHeader} from './AppHeader';
 import {NotFound} from './NotFound';
 import {Dashboard} from './Dashboard';
-import {AddOffer} from './Offer/OfferForm/AddOffer';
-import {EditOffer} from './Offer/OfferForm/EditOffer';
 import {PrivateRoute} from './util';
+import {AddOffer, EditOffer} from './Offer';
 
 export class App extends React.Component {
   render() {
