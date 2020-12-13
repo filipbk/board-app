@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   @Get('offers')
-  getBooks( @Body('userId', ParseIntPipe) userId: number ) {
+  getBooks(@Body('userId', ParseIntPipe) userId: number) {
     return this.service.getOffersOfUser(userId);
   }
 }

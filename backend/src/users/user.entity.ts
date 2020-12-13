@@ -1,9 +1,15 @@
 import { Exclude } from 'class-transformer';
-import {Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany} from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  OneToMany,
+} from 'typeorm';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import { IsString, IsNumber, IsOptional } from 'class-validator';
-import {Offer} from "../offer/offer.entity";
+import { Offer } from '../offer/offer.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,7 +35,11 @@ export class User extends BaseEntity {
   @IsString()
   lastName?: string;
 
-  @OneToMany( type => Offer , offer => offer.author, { cascade: ['insert', 'update']})
+  @OneToMany(
+    type => Offer,
+    offer => offer.author,
+    { cascade: ['insert', 'update'] },
+  )
   offers!: Offer[];
 
   @Exclude()
