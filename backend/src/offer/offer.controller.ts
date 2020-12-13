@@ -2,7 +2,7 @@ import {OfferService} from "./offer.service";
 import {
     Body,
     Controller,
-    Delete, Get, Header,
+    Delete, Get,
     Param,
     ParseIntPipe,
     Post,

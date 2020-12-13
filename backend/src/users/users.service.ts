@@ -57,7 +57,7 @@ export class UsersService {
   }
 
   async getOffersOfUser(userID: number): Promise<Offer[]> {
-    const user: User = <User>await User.findOne({where: {id: userID}, relations: ['offers']});
+    const user: User = await User.findOne({where: {id: userID}, relations: ['offers']}) as User;
 
     return user.offers;
   }

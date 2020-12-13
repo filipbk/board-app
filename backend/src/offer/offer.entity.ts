@@ -2,7 +2,7 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    ManyToOne, OneToOne, JoinColumn
+    ManyToOne,
 } from 'typeorm';
 import {IsNumber, IsOptional} from "class-validator";
 import {User} from "../users/user.entity";

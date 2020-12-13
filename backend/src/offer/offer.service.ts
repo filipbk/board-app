@@ -18,20 +18,20 @@ export class OfferService {
 
     async insertOffer(offer: OfferDto, currentUser: TokenUserData): Promise<Offer> {
         offer.author = new User(currentUser);
-        let newOffer = new Offer(offer);
-        newOffer.category = <Category>await this.categoryRepository.findOne({id: offer.categoryId});
+        const newOffer = new Offer(offer);
+        newOffer.category = await this.categoryRepository.findOne({id: offer.categoryId}) as Category;
 
         return this.offerRepository.save(newOffer);
     }
 
     async updateOffer(offerDto: OfferDto, requestOfferId: number, currentUser: TokenUserData) {
-        let userOffer = <Offer>await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']});
+        const userOffer = await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']}) as Offer;
         OfferService.handleExceptions(userOffer, currentUser);
 
         userOffer.city = offerDto.city;
         userOffer.description = offerDto.description;
         userOffer.title = offerDto.title;
-        userOffer.category = <Category>await this.categoryRepository.findOne({id: offerDto.categoryId});
+        userOffer.category = await this.categoryRepository.findOne({id: offerDto.categoryId}) as Category;
         userOffer.money = offerDto.money;
         userOffer.image = offerDto.image;
 
@@ -39,7 +39,7 @@ export class OfferService {
     }
 
     async deleteOfferById(requestOfferId: number, currentUser: TokenUserData) {
-        let userOffer = <Offer>await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']});
+        const userOffer = await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']}) as Offer;
         OfferService.handleExceptions(userOffer, currentUser);
 
         await this.offerRepository.delete({id: requestOfferId});
@@ -56,7 +56,6 @@ export class OfferService {
         const keyword = query.keyword || '';
         const categoryId = query.catId;
 
-        // @ts-ignore
         return await this.offerRepository.find(
             {
                 where: {title: Like('%' + keyword + '%'), categoryId: categoryId}, order: {title: "DESC"},
