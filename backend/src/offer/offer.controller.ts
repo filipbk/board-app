@@ -4,8 +4,6 @@ import {CurrentUser} from "../auth/decorators/current-user.decorator";
 import TokenUserData from "../auth/token-user-data";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {OfferDto} from "./offer.dto";
-import {Roles} from "../auth/decorators/roles.decorator";
-import {Role} from "../auth/role";
 import {AuthGuard} from "@nestjs/passport";
 import {RolesGuard} from "../auth/guards/roles.guard";
 

@@ -2,11 +2,12 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    ManyToOne
+    ManyToOne, OneToOne, JoinColumn
 } from 'typeorm';
 import {IsNumber, IsOptional} from "class-validator";
 import {User} from "../users/user.entity";
 import {Base} from "../base-entity";
+import {Category} from "../category/category.entity";
 
 @Entity()
 export class Offer extends Base {
@@ -31,4 +32,12 @@ export class Offer extends Base {
 
     @ManyToOne(type => User, user => user.offers)
     author!: User;
+
+    @OneToOne(type => Category)
+    @JoinColumn()
+    category!: Category;
+
+    @Column({ nullable: true })
+    @IsNumber()
+    money!: number;
 }
