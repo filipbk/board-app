@@ -42,11 +42,12 @@ export class Dashboard extends React.Component {
     return categories
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item, key) => (
-        <Col key={key}>
+        <Col key={key} span={3}>
           <Card
             className='announcement-card'
             hoverable
             cover={<img alt='example' src={item.imageUrl} />}
+            style={{textAlign: 'center'}}
           >
             <Meta title={item.name} />
           </Card>
@@ -68,7 +69,7 @@ export class Dashboard extends React.Component {
           {isLoading ? (
             <Spin size='large' />
           ) : (
-            <Row gutter={[16, 16]} justify='space-around'>
+            <Row gutter={[16, 16]} justify='space-between'>
               {announcementsCards}
             </Row>
           )}
