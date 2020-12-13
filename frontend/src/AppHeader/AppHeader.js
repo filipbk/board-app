@@ -4,6 +4,9 @@ import {Layout, Menu, Button} from 'antd';
 import {Link} from 'react-router-dom';
 import {authenticationService} from '../services';
 import {history} from '../util';
+import {Typography} from 'antd';
+
+const {Text} = Typography;
 
 export class AppHeader extends React.Component {
   constructor(props) {
@@ -32,7 +35,7 @@ export class AppHeader extends React.Component {
     return [
       <Menu.Item key='/logout'>
         <Button type='link' onClick={() => this.logout()} className='logout-btn'>
-          Logout
+          <Text style={{fontSize: '14px'}}>Logout</Text>
         </Button>
       </Menu.Item>
     ];

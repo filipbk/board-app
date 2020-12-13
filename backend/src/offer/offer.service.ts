@@ -9,6 +9,7 @@ import { OfferDto } from './offer.dto';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Category } from '../category/category.entity';
 import { CategoryRepository } from '../category/category.repository';
+import { Role } from '../auth/role';
 
 export class OfferService {
   constructor(
@@ -100,7 +101,12 @@ export class OfferService {
       });
     }
 
-    if (userOffer.author.id !== currentUser.id) {
+    if (
+      !(
+        userOffer.author.id === currentUser.id ||
+        currentUser.role === Role.ADMIN
+      )
+    ) {
       throw new ForbiddenException({
         message: 'No access for this resource',
       });
