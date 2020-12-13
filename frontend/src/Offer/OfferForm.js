@@ -21,7 +21,7 @@ export class OfferForm extends React.Component {
       title: props.data && props.data.title,
       description: props.data && props.data.description,
       city: props.data && props.data.city,
-      price: props.data && props.data.price,
+      money: props.data && props.data.money,
       categoryId: props.data && props.data.categoryId,
       editMode: props.editMode,
       fileList: props.data && props.data.fileList ? props.data.fileList : [],
@@ -101,7 +101,7 @@ export class OfferForm extends React.Component {
       editMode,
       title,
       city,
-      price,
+      money,
       description,
       categoryId
     } = this.state;
@@ -122,7 +122,7 @@ export class OfferForm extends React.Component {
                 title,
                 description,
                 city,
-                price,
+                money,
                 categoryId
               }}
               {...layout}
@@ -193,7 +193,7 @@ export class OfferForm extends React.Component {
               </Form.Item>
 
               <Form.Item
-                name='price'
+                name='money'
                 label='Price'
                 rules={[
                   {
@@ -204,8 +204,8 @@ export class OfferForm extends React.Component {
                 ]}
               >
                 <Input
-                  id='price'
-                  onChange={(e) => this.setState({price: e.target.value})}
+                  id='money'
+                  onChange={(e) => this.setState({money: e.target.value})}
                 />
               </Form.Item>
 

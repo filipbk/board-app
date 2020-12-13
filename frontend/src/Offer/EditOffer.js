@@ -11,11 +11,11 @@ export class EditOffer extends React.Component {
 
     this.state = {
       offerData: {
-        title: 'New',
-        description: 'Sample text',
-        city: 'Wrocław',
-        price: 44.4,
-        categoryId: 1,
+        title: 'a',
+        description: 'b',
+        city: 'c',
+        money: 4,
+        categoryId: 2,
         fileList: [
           {
             uid: '-1',
@@ -48,7 +48,19 @@ export class EditOffer extends React.Component {
   }
 
   onSubmit(data) {
-    offersService.updateOffer(data, this.props.match.params.id);
+    offersService.updateOffer(data, this.props.match.params.id)
+      .then(() =>
+        notification.success({
+          message: 'Success',
+          description: 'Offer edited successfully'
+        })
+      )
+      .catch((error) =>
+        notification.error({
+          message: 'Error',
+          description: error.message || error
+        })
+      );
   }
 
   render() {

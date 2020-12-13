@@ -29,6 +29,10 @@ class OffersService {
       headers: authenticationHeader()
     }).then(handleResponse);
   }
+
+  uploadPhoto(formData) {
+
+  }
 }
 
 const offersService = new OffersService();
