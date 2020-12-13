@@ -19,5 +19,10 @@ export class OfferDto {
     author!: User;
 
     @IsOptional()
+    @IsNumber()
     money!: number;
+
+    @IsOptional()
+    @IsString()
+    image!: string;
 }

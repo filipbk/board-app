@@ -33,11 +33,13 @@ export class Offer extends Base {
     @ManyToOne(type => User, user => user.offers)
     author!: User;
 
-    @OneToOne(type => Category)
-    @JoinColumn()
+    @ManyToOne(type => Category)
     category!: Category;
 
     @Column({ nullable: true })
     @IsNumber()
     money!: number;
+
+    @Column({ length: 999, nullable: true })
+    image!: string;
 }

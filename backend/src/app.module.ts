@@ -9,6 +9,7 @@ import databaseConfig from './config/database.config';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { OfferModule } from './offer/offer.module';
+import {MulterModule} from "@nestjs/platform-express";
 
 @Module({
   imports: [
@@ -52,6 +53,9 @@ import { OfferModule } from './offer/offer.module';
     AuthModule,
     CategoryModule,
     OfferModule,
+    MulterModule.register({
+      dest: './files',
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
