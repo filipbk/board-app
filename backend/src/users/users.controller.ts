@@ -47,4 +47,9 @@ export class UsersController {
   deleteUser(@Param('id') id: number) {
     return this.service.deleteUserById(id);
   }
+
+  @Get('offers')
+  getBooks( @Body('userId', ParseIntPipe) userId: number ) {
+    return this.service.getOffersOfUser(userId);
+  }
 }
