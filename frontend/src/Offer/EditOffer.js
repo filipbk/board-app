@@ -65,6 +65,7 @@ export class EditOffer extends React.Component {
 
   updateOffer(data, imagePath) {
     data.image = imagePath;
+    data.version = this.state.offerData.version;
     return offersService.updateOffer(data, this.props.match.params.id);
   }
 

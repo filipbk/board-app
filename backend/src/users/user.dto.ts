@@ -17,6 +17,7 @@ export class UserDto {
   @IsOptional()
   enabled!: boolean;
 
+  @IsOptional()
   @IsEnum(Role)
   role!: Role;
 }

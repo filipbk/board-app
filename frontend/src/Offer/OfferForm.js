@@ -152,8 +152,10 @@ export class OfferForm extends React.Component {
                 label='Description'
                 rules={[
                   {
+                    type: 'string',
+                    max: 1000,
                     required: true,
-                    message: 'Please input description!'
+                    message: 'Please input description (with maximum length of 1000 characters)!'
                   }
                 ]}
               >

@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { OfferModule } from './offer/offer.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CommentModule } from './comment/comment.module';
+import { OptimisticLockingSubscriber } from './app.optimistic-locking.subscriber';
 import { AppSettingsModule } from './app-settings/app-settings.module';
 
 @Module({
@@ -27,6 +29,7 @@ import { AppSettingsModule } from './app-settings/app-settings.module';
           password: dbSettings.pass,
           database: dbSettings.databaseName,
           entities: ['dist/**/*.entity.js'],
+          subscribers: [OptimisticLockingSubscriber],
           synchronize: true,
         };
       },
@@ -57,6 +60,7 @@ import { AppSettingsModule } from './app-settings/app-settings.module';
     MulterModule.register({
       dest: './files',
     }),
+    CommentModule,
     AppSettingsModule,
   ],
   controllers: [AppController],

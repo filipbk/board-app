@@ -28,6 +28,7 @@ export class OfferService {
     newOffer.category = (await this.categoryRepository.findOne({
       id: offer.categoryId,
     })) as Category;
+    newOffer.version = 1;
 
     return this.offerRepository.save(newOffer);
   }
@@ -51,6 +52,7 @@ export class OfferService {
     })) as Category;
     userOffer.money = offerDto.money;
     userOffer.image = offerDto.image;
+    userOffer.version = offerDto.version;
 
     return this.offerRepository.save(userOffer);
   }

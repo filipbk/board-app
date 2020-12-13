@@ -46,7 +46,7 @@ export class AppSettingsService {
     if (settings != null) {
       await this.appSettingsRepository.save({ ...settings, adminToken: token });
     } else {
-      await this.appSettingsRepository.create({
+      await this.appSettingsRepository.save({
         adminToken: token,
       });
     }

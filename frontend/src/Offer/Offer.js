@@ -4,6 +4,8 @@ import {Col, notification, Row, Spin, Typography, Button} from 'antd';
 import {Link, Redirect} from 'react-router-dom';
 import {history} from '../util';
 import {UserRoles} from '../constants/UserRoles';
+import {Comments} from './Comments/Comments';
+import {AuthorComments} from './Comments/AuthorComments';
 
 export class Offer extends React.Component {
   constructor(props) {
@@ -70,6 +72,20 @@ export class Offer extends React.Component {
     }
 
     return 'FREE';
+  }
+
+  getCommentsComponent() {
+    const {offerData} = this.state;
+    if (this.hasEditPermissions()) {
+      return <AuthorComments offerId={this.props.match.params.id} />;
+    } else if (authenticationService.currentUserValue()) {
+      return (
+        <Comments
+          toWhoId={offerData.author.id}
+          offerId={parseInt(this.props.match.params.id, 10)}
+        />
+      );
+    }
   }
 
   render() {
@@ -139,6 +155,7 @@ export class Offer extends React.Component {
             ) : null}
           </Col>
         </Row>
+        <Row>{this.getCommentsComponent()}</Row>
       </>
     );
   }

@@ -64,7 +64,7 @@ export class UsersController {
     return this.base.getManyBase!(req);
   }
 
-  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,

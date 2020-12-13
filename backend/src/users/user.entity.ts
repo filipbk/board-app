@@ -5,6 +5,7 @@ import { Role } from '../auth/role';
 import { IsString, IsNumber, IsOptional } from 'class-validator';
 import { Offer } from '../offer/offer.entity';
 import { Base } from '../base-entity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class User extends Base {
@@ -36,6 +37,13 @@ export class User extends Base {
     { cascade: ['insert', 'update'] },
   )
   offers!: Offer[];
+
+  @OneToMany(
+    () => Comment,
+    comment => comment.author,
+    { cascade: ['insert', 'update'] },
+  )
+  comments!: Comment[];
 
   @Exclude()
   @Column()
