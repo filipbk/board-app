@@ -1,4 +1,5 @@
 import {authenticationHeader, handleResponse} from '../util';
+import {authenticationService} from './authentication.service';
 
 class OffersService {
   getOffer(id) {
@@ -31,7 +32,15 @@ class OffersService {
   }
 
   uploadPhoto(formData) {
+    const url = process.env.REACT_APP_API_URL;
 
+    return fetch(`${url}/offers/photo`, {
+      body: formData,
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authenticationService.getUserToken()}`
+      }
+    }).then(handleResponse);
   }
 }
 

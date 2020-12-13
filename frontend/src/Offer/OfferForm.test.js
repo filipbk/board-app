@@ -10,13 +10,13 @@ describe('OfferForm', () => {
     offerForm.find('#title').simulate('change', {target: {value: 'A'}});
     offerForm.find('#description').simulate('change', {target: {value: 'B'}});
     offerForm.find('#city').simulate('change', {target: {value: 'C'}});
-    offerForm.find('#price').simulate('change', {target: {value: 2.2}});
+    offerForm.find('#money').simulate('change', {target: {value: 2}});
 
     expect(offerForm.state('categoryId')).toBe(1);
     expect(offerForm.state('title')).toBe('A');
     expect(offerForm.state('description')).toBe('B');
     expect(offerForm.state('city')).toBe('C');
-    expect(offerForm.state('price')).toBe(2.2);
+    expect(offerForm.state('money')).toBe(2);
   });
 
   it('passes proper values to onSubmit', () => {
@@ -27,11 +27,11 @@ describe('OfferForm', () => {
       title: 'A',
       description: 'B',
       city: 'C',
-      price: 2.2
+      money: 2
     };
 
     offerForm.find('#form').simulate('finish', eventData);
-    expect(onSubmit).toHaveBeenCalledWith(eventData);
+    expect(onSubmit).toHaveBeenCalledWith(eventData, null);
   });
 
   it('renders offer form in non edit mode', () => {

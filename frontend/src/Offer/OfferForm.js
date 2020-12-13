@@ -14,6 +14,7 @@ import './OfferForm.css';
 import {categoriesService} from '../services';
 
 export class OfferForm extends React.Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
 
@@ -30,6 +31,7 @@ export class OfferForm extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.fetchCategories();
   }
 
@@ -39,15 +41,23 @@ export class OfferForm extends React.Component {
     categoriesService
       .getAllCategories()
       .then((result) => {
-        this.setState({categories: result, isLoading: false});
+        if (this._isMounted) {
+          this.setState({categories: result, isLoading: false});
+        }
       })
       .catch((error) => {
         notification.error({
           message: 'Error',
           description: error.message || error
         });
-        this.setState({isLoading: false});
+        if (this._isMounted) {
+          this.setState({isLoading: false});
+        }
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   async onPreview(file) {
@@ -72,10 +82,12 @@ export class OfferForm extends React.Component {
   }
 
   onFinish(e) {
-    const {fileList} = this.state;
+    const {fileList, money} = this.state;
     const {onSubmit} = this.props;
-    e.photos = fileList;
-    onSubmit(e);
+    const image = fileList.length > 0 ? fileList[0] : null;
+    delete e.photos;
+    e.money = parseInt(money);
+    onSubmit(e, image);
   }
 
   getCategoriesDropdown() {
@@ -197,7 +209,7 @@ export class OfferForm extends React.Component {
                 label='Price'
                 rules={[
                   {
-                    pattern: /^\d+(\.\d{1,2})?$/,
+                    pattern: /^\d+?$/,
                     required: true,
                     message: 'Please input price!'
                   }
