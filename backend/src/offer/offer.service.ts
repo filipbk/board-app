@@ -1,5 +1,7 @@
 import { Offer } from './offer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Like } from 'typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { OfferRepository } from './offer.repository';
 import TokenUserData from '../auth/token-user-data';
 import { User } from '../users/user.entity';
@@ -7,7 +9,6 @@ import { OfferDto } from './offer.dto';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Category } from '../category/category.entity';
 import { CategoryRepository } from '../category/category.repository';
-import { Like } from 'typeorm';
 
 export class OfferService {
   constructor(
@@ -70,18 +71,22 @@ export class OfferService {
     });
   }
 
-  async findAll(query: any) {
-    const take = query.take || 10;
-    const skip = query.skip || 0;
-    const keyword = query.keyword || '';
-    const categoryId = query.catId;
+  async findAll(
+    paginationOptions: IPaginationOptions,
+    query: string,
+    categoryId: number,
+  ) {
+    const queryBuilder = this.offerRepository.createQueryBuilder('c');
 
-    return this.offerRepository.findAndCount({
-      where: { title: Like(`%${keyword}%`), categoryId: categoryId },
-      order: { title: 'DESC' },
-      take: take,
-      skip: skip,
-    });
+    if (query) {
+      queryBuilder.where({ title: Like(`%${query}%`) });
+    }
+
+    if (categoryId) {
+      queryBuilder.andWhere('categoryId = :catId', { catId: categoryId });
+    }
+
+    return paginate<Offer>(queryBuilder, paginationOptions);
   }
 
   private static handleExceptions(

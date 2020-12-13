@@ -5,11 +5,7 @@ import './OfferItem.css';
 export function OfferItem(props) {
   return (
     <Card>
-      <Col
-        gutter={{xs: 8, sm: 16, md: 24, lg: 32}}
-        flex={5}
-        justify='space-between'
-      >
+      <Col gutter={{xs: 8, sm: 16, md: 24, lg: 32}} flex={5} justify='space-between'>
         <Row className='gutter-row' span={4}>
           <div
             style={{
@@ -20,7 +16,8 @@ export function OfferItem(props) {
             }}
           >
             <img
-              src={props.thumbnail}
+              id={`offer-${props.id}-thumbnail`}
+              src={props.image}
               alt='Offer'
               style={{height: 'auto', width: '100%'}}
             />
@@ -28,6 +25,7 @@ export function OfferItem(props) {
         </Row>
         <Row className='gutter-row' span={4}>
           <Typography.Title
+            id={`offer-${props.id}-title`}
             className='title'
             level={4}
             strong
@@ -44,9 +42,10 @@ export function OfferItem(props) {
         </Row>
         <Row className='gutter-row' span={4}>
           <div>
-            <span style={{fontWeight: 'bold'}}>{`${props.price.toFixed(
-              2
-            )} zł`}</span>
+            <span
+              id={`offer-${props.id}-price`}
+              style={{fontWeight: 'bold'}}
+            >{`${props.money.toFixed(2)} zł`}</span>
           </div>
         </Row>
       </Col>

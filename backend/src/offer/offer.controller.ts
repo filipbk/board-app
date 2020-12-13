@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import TokenUserData from '../auth/token-user-data';
@@ -86,7 +87,19 @@ export class OfferController {
   }
 
   @Get()
-  findAll(@Req() request: Request) {
-    return this.service.findAll(request.query);
+  findAll(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+    @Query('query') query: string,
+    @Query('categoryId') categoryId: number,
+  ) {
+    return this.service.findAll(
+      {
+        page,
+        limit,
+      },
+      query,
+      categoryId,
+    );
   }
 }

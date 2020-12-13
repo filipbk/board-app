@@ -59,6 +59,7 @@ export function OfferList(props) {
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(FIRST_PAGE);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [totalOffersCount, setTotalOffersCount] = useState(DEFAULT_PAGE_SIZE);
   const [filters, setFilters] = useState({});
 
   const updateState = (values) => {
@@ -89,9 +90,7 @@ export function OfferList(props) {
       const queryParamsString = buildQueryParams().toString();
       const basePath = '/offers';
 
-      return queryParamsString === ''
-        ? basePath
-        : `${basePath}?${queryParamsString}`;
+      return queryParamsString === '' ? basePath : `${basePath}?${queryParamsString}`;
     };
 
     const buildQueryParams = () => {
@@ -121,8 +120,10 @@ export function OfferList(props) {
   }, [props.history, filters.category, filters.query, page, pageSize]);
 
   const getOffers = async (page, pageSize, filters) => {
-    const offers = await offersService.getOffers(page, pageSize, filters);
-    setOffers(offers);
+    const queryFilters = {query: filters.query, categoryId: getCategoryIdByName(filters.category)};
+    const offersResponse = await offersService.getOffers(page, pageSize, queryFilters);
+    setOffers(offersResponse.items);
+    setTotalOffersCount(offersResponse.meta.totalItems);
   };
 
   const getCategories = async () => {
@@ -138,11 +139,12 @@ export function OfferList(props) {
     }
   };
 
+  const getCategoryIdByName = (categoryName) =>
+    categories.find((category) => category.name === categoryName).id;
+
   const onSearch = (value) => setFilters({...filters, query: value});
 
-  useEffect(() => updateState(getPathParamsValues(props.location.search)), [
-    props.location.search
-  ]);
+  useEffect(() => updateState(getPathParamsValues(props.location.search)), [props.location.search]);
 
   useEffect(() => {
     getOffers(page, pageSize, filters);
@@ -161,7 +163,7 @@ export function OfferList(props) {
         grid={{gutter: 16, column: 2}}
         dataSource={offers}
         pagination={{
-          total: 1000, // TODO when api comes
+          total: totalOffersCount,
           showSizeChanger: true,
           showQuickJumper: true,
           defaultPageSize: DEFAULT_PAGE_SIZE,

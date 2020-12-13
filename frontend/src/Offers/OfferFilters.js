@@ -8,6 +8,7 @@ export function OfferFilters(props) {
     <Row style={{marginBottom: '2em', textAlign: 'center'}}>
       <Col span={9} offset={7}>
         <Input.Search
+          id='search'
           placeholder='What are you looking for?'
           onSearch={onSearch}
           size='large'
@@ -16,6 +17,7 @@ export function OfferFilters(props) {
       </Col>
       <Col span={3} offset={2}>
         <Select
+          id='category-select'
           style={{width: 160}}
           size='large'
           onChange={onCategoryChange}

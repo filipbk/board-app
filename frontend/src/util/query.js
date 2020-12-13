@@ -1,5 +1,5 @@
-const PAGE_NUMBER_PARAM = '_page';
-const PAGE_SIZE_LIMIT_PARAM = '_limit';
+const PAGE_NUMBER_PARAM = 'page';
+const PAGE_SIZE_LIMIT_PARAM = 'limit';
 
 export const buildQueryUrl = (baseUrl, options) => {
   const url = new URL(baseUrl);
@@ -13,9 +13,10 @@ export const buildQueryUrl = (baseUrl, options) => {
   }
 
   if (options.filters) {
-    Object.keys(options.filters).forEach((filterName) =>
-      url.searchParams.append(filterName, options.filters[filterName])
-    );
+    Object.keys(options.filters).forEach((filterName) => {
+      if (options.filters[filterName] != null)
+        return url.searchParams.append(filterName, options.filters[filterName]);
+    });
   }
 
   return url;
