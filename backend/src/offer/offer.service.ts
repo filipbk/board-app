@@ -32,6 +32,7 @@ export class OfferService {
         userOffer.title = offerDto.title;
         userOffer.category = <Category>await this.categoryRepository.findOne({id: offerDto.categoryId});
         userOffer.money = offerDto.money;
+        userOffer.image = offerDto.image;
 
         return this.offerRepository.save(userOffer);
     }
