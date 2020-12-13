@@ -22,6 +22,7 @@ export class OfferService {
   ): Promise<Offer> {
     offer.author = new User(currentUser);
     const newOffer = new Offer(offer);
+
     newOffer.category = (await this.categoryRepository.findOne({
       id: offer.categoryId,
     })) as Category;
@@ -65,7 +66,7 @@ export class OfferService {
   getOffer(id: number) {
     return this.offerRepository.findOne({
       where: { id: id },
-      relations: ['author'],
+      relations: ['author', 'category'],
     });
   }
 
@@ -75,8 +76,8 @@ export class OfferService {
     const keyword = query.keyword || '';
     const categoryId = query.catId;
 
-    return await this.offerRepository.find({
-      where: { title: Like('%' + keyword + '%'), categoryId: categoryId },
+    return this.offerRepository.findAndCount({
+      where: { title: Like(`%${keyword}%`), categoryId: categoryId },
       order: { title: 'DESC' },
       take: take,
       skip: skip,
@@ -87,7 +88,7 @@ export class OfferService {
     userOffer: Offer,
     currentUser: TokenUserData,
   ) {
-    if (userOffer === undefined) {
+    if (!userOffer) {
       throw new NotFoundException({
         message: 'No resource',
       });
