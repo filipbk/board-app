@@ -69,4 +69,9 @@ export class OfferController {
     seeUploadedFile(@Param('imgpath') image: any, @Res() res: any) {
         return res.sendFile(image, { root: './files' });
     }
+
+    @Get(':id')
+    getOffer(@Param('id') id: number) {
+        return this.service.getOffer(id);
+    }
 }

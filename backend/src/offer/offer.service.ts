@@ -12,7 +12,8 @@ export class OfferService {
     constructor(
         @InjectRepository(Offer) private readonly offerRepository: OfferRepository,
         @InjectRepository(Category) private readonly categoryRepository: CategoryRepository,
-    ) {}
+    ) {
+    }
 
     async insertOffer(offer: OfferDto, currentUser: TokenUserData): Promise<Offer> {
         offer.author = new User(currentUser);
@@ -22,8 +23,7 @@ export class OfferService {
         return this.offerRepository.save(newOffer);
     }
 
-    async updateOffer(offerDto: OfferDto, requestOfferId: number, currentUser: TokenUserData)
-    {
+    async updateOffer(offerDto: OfferDto, requestOfferId: number, currentUser: TokenUserData) {
         let userOffer = <Offer>await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']});
         OfferService.handleExceptions(userOffer, currentUser);
 
@@ -37,12 +37,16 @@ export class OfferService {
         return this.offerRepository.save(userOffer);
     }
 
-    async deleteOfferById(requestOfferId: number, currentUser: TokenUserData)
-    {
+    async deleteOfferById(requestOfferId: number, currentUser: TokenUserData) {
         let userOffer = <Offer>await this.offerRepository.findOne({where: {id: requestOfferId}, relations: ['author']});
         OfferService.handleExceptions(userOffer, currentUser);
 
-        await this.offerRepository.delete({ id: requestOfferId });
+        await this.offerRepository.delete({id: requestOfferId});
+    }
+
+    getOffer(id: number)
+    {
+        return this.offerRepository.findOne({where: {id: id}, relations: ['author']});
     }
 
     private static handleExceptions(userOffer: Offer, currentUser: TokenUserData)
