@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {List, Input} from 'antd';
+import {List} from 'antd';
 import {OfferItem} from './OfferItem';
 import {Link} from 'react-router-dom';
 import {offersService} from '../services/offers.service';
+import {categoriesService} from '../services';
+import {OfferFilters} from './OfferFilters';
 
 const DEFAULT_PAGE_SIZE = 10;
 const FIRST_PAGE = 1;
@@ -45,8 +47,16 @@ const getPathParamsValues = (pathSearchString) => {
   };
 };
 
+const filtersChanged = (oldFilters, newFilters) => {
+  return (
+    (newFilters.category && newFilters.category !== oldFilters.category) ||
+    (newFilters.query && newFilters.query !== oldFilters.query)
+  );
+};
+
 export function OfferList(props) {
   const [offers, setOffers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(FIRST_PAGE);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [filters, setFilters] = useState({});
@@ -60,11 +70,7 @@ export function OfferList(props) {
       setPageSize(values.pageSize);
     }
 
-    if (
-      (values.filters.category && // TODO
-        values.filters.category !== filters.category) ||
-      (values.filters.query && values.filters.query !== filters.query)
-    ) {
+    if (filtersChanged(filters, values.filters)) {
       const pathFilters = {};
       if (values.filters.category) {
         pathFilters.category = values.filters.category;
@@ -73,6 +79,7 @@ export function OfferList(props) {
       if (values.filters.query) {
         pathFilters.query = values.filters.query;
       }
+
       setFilters(pathFilters);
     }
   };
@@ -118,26 +125,38 @@ export function OfferList(props) {
     setOffers(offers);
   };
 
+  const getCategories = async () => {
+    const categories = await categoriesService.getAllCategories();
+    setCategories(categories);
+  };
+
+  const onCategoryChange = (newCategory) => {
+    if (newCategory) {
+      setFilters({...filters, category: newCategory});
+    } else {
+      setFilters({...filters, category: null});
+    }
+  };
+
+  const onSearch = (value) => setFilters({...filters, query: value});
+
   useEffect(() => updateState(getPathParamsValues(props.location.search)), [
     props.location.search
   ]);
 
   useEffect(() => {
     getOffers(page, pageSize, filters);
+    getCategories();
     updatePath();
   }, [page, pageSize, filters, updatePath]);
 
   return (
     <div>
-      <div style={{marginBottom: '2em', textAlign: 'center'}}>
-        <Input.Search
-          placeholder='What are you looking for?'
-          onSearch={(value) => setFilters({...filters, query: value})}
-          size='large'
-          style={{width: '500px'}}
-          enterButton
-        />
-      </div>
+      <OfferFilters
+        categories={categories}
+        onSearch={onSearch}
+        onCategoryChange={onCategoryChange}
+      />
       <List
         grid={{gutter: 16, column: 2}}
         dataSource={offers}

@@ -11,18 +11,42 @@ export function OfferItem(props) {
         justify='space-between'
       >
         <Row className='gutter-row' span={4}>
-          <div className='crop'>
-            <img src={props.thumbnail} alt='Offer' />
+          <div
+            style={{
+              margin: 'auto',
+              height: '300px',
+              width: '400px',
+              overflow: 'hidden'
+            }}
+          >
+            <img
+              src={props.thumbnail}
+              alt='Offer'
+              style={{height: 'auto', width: '100%'}}
+            />
           </div>
         </Row>
         <Row className='gutter-row' span={4}>
-          <Typography.Title className='title' level={4} strong>
+          <Typography.Title
+            className='title'
+            level={4}
+            strong
+            style={{
+              marginTop: '1em',
+              overflow: 'hidden',
+              maxWidth: '40ch',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical'
+            }}
+          >
             {props.title}
           </Typography.Title>
         </Row>
         <Row className='gutter-row' span={4}>
           <div>
-            <span className='price'>{`${props.price.toFixed(2)} zł`}</span>
+            <span style={{fontWeight: 'bold'}}>{`${props.price.toFixed(
+              2
+            )} zł`}</span>
           </div>
         </Row>
       </Col>
