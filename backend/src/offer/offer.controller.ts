@@ -6,7 +6,7 @@ import {
     Param,
     ParseIntPipe,
     Post,
-    Put, Res,
+    Put, Req, Res,
     UploadedFile,
     UseGuards,
     UseInterceptors
@@ -21,6 +21,7 @@ import {FileInterceptor} from "@nestjs/platform-express";
 import {editFileName} from "../utils/edit-file-name.utils";
 import {imageFileFilter} from "../utils/image-file-filter.utils";
 import {diskStorage} from "multer";
+import { Request } from 'express';
 
 @Controller('offers')
 export class OfferController {
@@ -73,5 +74,10 @@ export class OfferController {
     @Get(':id')
     getOffer(@Param('id') id: number) {
         return this.service.getOffer(id);
+    }
+
+    @Get()
+    findAll(@Req() request: Request) {
+        return this.service.findAll(request.query);
     }
 }

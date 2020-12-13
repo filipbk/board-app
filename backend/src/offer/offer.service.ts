@@ -7,6 +7,7 @@ import {OfferDto} from "./offer.dto";
 import {ForbiddenException, NotFoundException} from "@nestjs/common";
 import {Category} from "../category/category.entity";
 import {CategoryRepository} from "../category/category.repository";
+import {Like} from "typeorm";
 
 export class OfferService {
     constructor(
@@ -47,6 +48,22 @@ export class OfferService {
     getOffer(id: number)
     {
         return this.offerRepository.findOne({where: {id: id}, relations: ['author']});
+    }
+
+    async findAll(query: any) {
+        const take = query.take || 10;
+        const skip = query.skip || 0;
+        const keyword = query.keyword || '';
+        const categoryId = query.catId;
+
+        // @ts-ignore
+        return await this.offerRepository.find(
+            {
+                where: {title: Like('%' + keyword + '%'), categoryId: categoryId}, order: {title: "DESC"},
+                take: take,
+                skip: skip
+            }
+        )
     }
 
     private static handleExceptions(userOffer: Offer, currentUser: TokenUserData)
