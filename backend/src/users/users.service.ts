@@ -1,23 +1,44 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  NotFoundException,
+  BadRequestException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
+import { AppSettingsService } from '../app-settings/app-settings.service';
 
-export class UsersService {
+export class UsersService extends TypeOrmCrudService<User> {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: UserRepository,
-  ) {}
+    @InjectRepository(UserRepository)
+    private readonly usersRepository: UserRepository,
+    @Inject(forwardRef(() => AppSettingsService))
+    private readonly appSettingsService: AppSettingsService,
+  ) {
+    super(usersRepository);
+  }
 
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne({ id });
+  async getUser(
+    userId: number,
+    currentUser: TokenUserData,
+  ): Promise<User | undefined> {
+    if (userId === currentUser.id || currentUser.role === Role.ADMIN) {
+      return this.usersRepository.findOne({ id: userId });
+    }
+
+    throw new NotFoundException({
+      message: 'Resource with given id does not exist!',
+    });
   }
 
   updateUser(user: User, requestedUserId: number, currentUser: TokenUserData) {
@@ -86,5 +107,32 @@ export class UsersService {
       email,
       roles: [Role.USER],
     });
+  }
+
+  getUsersCount(): Promise<number> {
+    return this.usersRepository.count();
+  }
+
+  async applyAdminToken(email: string, token: string) {
+    const isTokenValid = await this.appSettingsService.validateOperatorToken(
+      token,
+    );
+    if (!isTokenValid) {
+      throw new BadRequestException('Invalid admin token!');
+    }
+
+    const user = await this.usersRepository.findOne({ email });
+
+    if (!user) {
+      throw new BadRequestException('User does not exist!');
+    }
+
+    user.enabled = true;
+    user.role = Role.ADMIN;
+    await this.usersRepository.save(user);
+
+    this.appSettingsService.markAdminTokenAsUsed();
+
+    return { message: 'Token successfully applied!' };
   }
 }

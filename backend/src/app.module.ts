@@ -12,6 +12,7 @@ import { OfferModule } from './offer/offer.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { CommentModule } from './comment/comment.module';
 import { OptimisticLockingSubscriber } from './app.optimistic-locking.subscriber';
+import { AppSettingsModule } from './app-settings/app-settings.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { OptimisticLockingSubscriber } from './app.optimistic-locking.subscriber
       dest: './files',
     }),
     CommentModule,
+    AppSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

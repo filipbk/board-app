@@ -1,19 +1,14 @@
-import { Exclude } from 'class-transformer';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  BaseEntity,
-  OneToMany,
-} from 'typeorm';
+import { Exclude, Expose } from 'class-transformer';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import { IsString, IsNumber, IsOptional } from 'class-validator';
 import { Offer } from '../offer/offer.entity';
+import { Base } from '../base-entity';
 import { Comment } from '../comment/comment.entity';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends Base {
   constructor(partial: Partial<User>) {
     super();
     Object.assign(this, partial);
@@ -58,11 +53,10 @@ export class User extends BaseEntity {
   @Column()
   provider!: Provider;
 
-  @Exclude()
   @Column({ default: false })
   enabled!: boolean;
 
-  @Exclude()
+  @Expose({ groups: [Role.ADMIN] })
   @Column({ default: Role.USER })
   role!: Role;
 }

@@ -4,6 +4,7 @@ import {Layout, Menu, Button} from 'antd';
 import {Link} from 'react-router-dom';
 import {authenticationService} from '../services';
 import {history} from '../util';
+import {UserRoles} from '../constants/UserRoles';
 import {Typography} from 'antd';
 
 const {Text} = Typography;
@@ -33,6 +34,18 @@ export class AppHeader extends React.Component {
 
   getLoggedInUserNavbar() {
     return [
+      ...[
+        authenticationService.currentUserHasRole(UserRoles.ADMIN) ? (
+          <Menu.Item key='users'>
+            Users
+            <Link to='/users' />
+          </Menu.Item>
+        ) : null
+      ],
+      <Menu.Item key='offers'>
+        Offers
+        <Link to='/offers' />
+      </Menu.Item>,
       <Menu.Item key='/logout'>
         <Button type='link' id='logout-button' onClick={() => this.logout()} className='logout-btn'>
           <Text style={{fontSize: '14px'}}>Logout</Text>
@@ -43,6 +56,10 @@ export class AppHeader extends React.Component {
 
   getNotLoggedInUserNavbar() {
     return [
+      <Menu.Item key='offers'>
+        Offers
+        <Link to='/offers' />
+      </Menu.Item>,
       <Menu.Item key='/auth/google'>
         <Button
           type='link'
@@ -74,10 +91,6 @@ export class AppHeader extends React.Component {
           <Link to='/'>Board App</Link>
         </div>
         <Menu className='app-menu' mode='horizontal' selectedKeys={[history.location.pathname]}>
-          <Menu.Item key='offers'>
-            Offers
-            <Link to='/offers' />
-          </Menu.Item>
           {menuItems}
         </Menu>
       </Layout.Header>
