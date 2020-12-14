@@ -15,7 +15,7 @@ h2.dashboard-title {
 }
 .announcement-card {
   margin: 0 auto;
-  width: 95%;
+  width: 100%;
 }
 
 .announcement-card img {
@@ -25,4 +25,18 @@ h2.dashboard-title {
 
 .announcement-card .ant-card-meta-title {
   font-size: 15px;
+}
+
+a.add-offer-link {
+  display: block;
+  margin: 20px auto 0 auto;
+  text-align: center;
+  background-color: #1890ff;
+  width: 30%;
+  text-decoration: none;
+  color: #fff;
+  height: 32px;
+  font-size: 14px;
+  padding: 4px 15px;
+  border-radius: 2px;
 }

@@ -3,7 +3,8 @@ import {Card, Col, notification, Row, Spin, Typography} from 'antd';
 import {Layout} from 'antd';
 import {Link} from 'react-router-dom';
 import './Dashboard.css';
-import {categoriesService} from '../services';
+import {authenticationService, categoriesService} from '../services';
+import {history} from '../util';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -16,7 +17,16 @@ export class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    this.checkUserPermissions();
     this.fetchCategories();
+  }
+
+  checkUserPermissions() {
+    const user = authenticationService.currentUserValue();
+
+    if (user && !user.enabled) {
+      history.push(`/login/success/${authenticationService.getUserToken()}`);
+    }
   }
 
   fetchCategories() {
@@ -77,6 +87,11 @@ export class Dashboard extends React.Component {
             </Row>
           )}
         </Layout>
+        {authenticationService.currentUserValue() ? (
+          <Link to='/offer/add' className='add-offer-link'>
+            Add new offer
+          </Link>
+        ) : null}
       </>
     );
   }

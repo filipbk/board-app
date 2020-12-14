@@ -181,7 +181,7 @@ export function OfferList(props) {
         style={{marginLeft: '10%', marginRight: '10%'}}
         renderItem={(item) => (
           <List.Item>
-            <Link to={`/offers/${item.id}`}>
+            <Link to={`/offer/${item.id}`}>
               <OfferItem {...item} />
             </Link>
           </List.Item>
