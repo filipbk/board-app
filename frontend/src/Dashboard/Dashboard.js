@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, Col, notification, Row, Spin, Typography} from 'antd';
 import {Layout} from 'antd';
+import {Link} from 'react-router-dom';
 import './Dashboard.css';
 import {categoriesService} from '../services';
 
@@ -43,14 +44,16 @@ export class Dashboard extends React.Component {
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item, key) => (
         <Col key={key} span={3}>
-          <Card
-            className='announcement-card'
-            hoverable
-            cover={<img alt='example' src={item.imageUrl} />}
-            style={{textAlign: 'center'}}
-          >
-            <Meta title={item.name} />
-          </Card>
+          <Link to={`/offers?cat=${item.name}`}>
+            <Card
+              className='announcement-card'
+              hoverable
+              cover={<img alt='example' src={item.imageUrl} />}
+              style={{textAlign: 'center'}}
+            >
+              <Meta title={item.name} />
+            </Card>
+          </Link>
         </Col>
       ));
   }
