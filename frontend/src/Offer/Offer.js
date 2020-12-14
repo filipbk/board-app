@@ -72,7 +72,8 @@ export class Offer extends React.Component {
         </Typography.Title>
         <Row gutter={4}>
           <Col span={12} className='offer-info'>
-            {authenticationService.currentUserValue().id === offerData.author.id ? (
+            {authenticationService.currentUserValue() &&
+            authenticationService.currentUserValue().id === offerData.author.id ? (
               <Row gutter={4} className='btns-container'>
                 <Col span={12}>
                   <Link
