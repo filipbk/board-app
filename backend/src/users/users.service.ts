@@ -1,16 +1,31 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { Offer } from '../offer/offer.entity';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 
-export class UsersService {
+export class UsersService extends TypeOrmCrudService<User> {
+  getUsersPage(
+    paginationOptions: IPaginationOptions,
+  ): Promise<Pagination<User>> {
+    return paginate<User>(this.usersRepository, paginationOptions);
+  }
   constructor(
-    @InjectRepository(User) private readonly usersRepository: UserRepository,
-  ) {}
+    @InjectRepository(User) repo: any,
+    @InjectRepository(UserRepository)
+    private readonly usersRepository: UserRepository,
+  ) {
+    super(repo);
+  }
 
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find();

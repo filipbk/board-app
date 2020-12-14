@@ -7,10 +7,18 @@ import {
   Param,
   UseGuards,
   ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
+import {
+  Crud,
+  CrudController,
+  Override,
+  ParsedRequest,
+  CrudRequest,
+} from '@nestjsx/crud';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { ActiveGuard } from '../auth/guards/active.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Role } from '../auth/role';
@@ -20,17 +28,37 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import TokenUserData from '../auth/token-user-data';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
+@Crud({
+  model: {
+    type: User,
+  },
+  routes: {
+    only: ['getManyBase'],
+  },
+})
 @Controller('users')
 export class UsersController {
-  constructor(private readonly service: UsersService) {}
+  constructor(public service: UsersService) {}
 
-  @UseGuards(AuthGuard('jwt'), ActiveGuard)
+  get base(): CrudController<User> {
+    return this as CrudController<User>;
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Get(':id')
   get(@Param('id') id: number) {
     return this.service.getUser(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Override('getManyBase')
+  getMany(@ParsedRequest() req: CrudRequest) {
+    return this.base.getManyBase!(req);
+  }
+
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Put(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
@@ -42,7 +70,7 @@ export class UsersController {
   }
 
   @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
     return this.service.deleteUserById(id);
