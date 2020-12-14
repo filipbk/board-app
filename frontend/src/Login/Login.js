@@ -105,11 +105,7 @@ export class Login extends React.Component {
           </Form.Item>
 
           <Form.Item className='login-btn-wrapper'>
-            <Button
-              type='primary'
-              htmlType='submit'
-              className='login-form-button'
-            >
+            <Button type='primary' htmlType='submit' className='login-form-button'>
               Submit
             </Button>
           </Form.Item>

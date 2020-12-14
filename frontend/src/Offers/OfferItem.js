@@ -3,6 +3,8 @@ import {Card, Row, Col, Typography} from 'antd';
 import './OfferItem.css';
 
 export function OfferItem(props) {
+  const url = process.env.REACT_APP_API_URL;
+
   return (
     <Card>
       <Col gutter={{xs: 8, sm: 16, md: 24, lg: 32}} flex={5} justify='space-between'>
@@ -17,7 +19,7 @@ export function OfferItem(props) {
           >
             <img
               id={`offer-${props.id}-thumbnail`}
-              src={props.image}
+              src={`${url}/offers/photo/${props.image}`}
               alt='Offer'
               style={{height: 'auto', width: '100%'}}
             />

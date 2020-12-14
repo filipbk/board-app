@@ -35,12 +35,8 @@ describe('Login', () => {
     const spy = jest.spyOn(login.instance(), 'register');
 
     login.setState({currentUser: {id: 5, enabled: true}});
-    login
-      .find('#firstName')
-      .simulate('change', {target: {name: 'firstName', value: 'a'}});
-    login
-      .find('#lastName')
-      .simulate('change', {target: {name: 'lastName', value: 'b'}});
+    login.find('#firstName').simulate('change', {target: {name: 'firstName', value: 'a'}});
+    login.find('#lastName').simulate('change', {target: {name: 'lastName', value: 'b'}});
     login.find('.login-form').simulate('finish');
 
     expect(spy).toHaveBeenCalled();

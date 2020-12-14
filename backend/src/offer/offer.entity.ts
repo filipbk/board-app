@@ -34,10 +34,10 @@ export class Offer extends Base {
   @ManyToOne(type => Category)
   category!: Category;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   @IsNumber()
   money!: number;
 
-  @Column({ length: 999, nullable: true })
+  @Column({ length: 999, nullable: true, default: 'unnamed.png' })
   image!: string;
 }
