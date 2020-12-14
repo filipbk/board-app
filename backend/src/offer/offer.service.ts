@@ -77,6 +77,7 @@ export class OfferService {
     categoryId: number,
   ) {
     const queryBuilder = this.offerRepository.createQueryBuilder('c');
+    queryBuilder.orderBy('createdAt', 'DESC');
 
     if (query) {
       queryBuilder.where({ title: Like(`%${query}%`) });
