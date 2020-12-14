@@ -39,6 +39,11 @@ class AuthenticationService {
   getUserToken() {
     return localStorage.getItem('token');
   }
+
+  currentUserHasRole(roleName) {
+    const currentUser = this.currentUserValue();
+    return currentUser && currentUser.role === roleName;
+  }
 }
 
 const authenticationService = new AuthenticationService();
