@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {IsNumber, IsOptional, IsString, Length} from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { User } from '../users/user.entity';
 
@@ -7,6 +7,7 @@ export class OfferDto {
   title!: string;
 
   @IsString()
+  @Length(0, 1000 )
   description!: string;
 
   @IsString()
