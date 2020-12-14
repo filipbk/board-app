@@ -176,7 +176,7 @@ export function OfferList(props) {
           current: page,
           showTotal: (total) => `Total ${total} items`,
           onChange: (page) => setPage(page),
-          onShowSizeChange: (_, newSize) => setPageSize(newSize)
+          onShowSizeChange: (_, newSize) => {setPageSize(newSize); setPage(FIRST_PAGE);}
         }}
         style={{marginLeft: '10%', marginRight: '10%'}}
         renderItem={(item) => (
