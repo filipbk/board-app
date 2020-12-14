@@ -19,7 +19,7 @@ export class AddOffer extends React.Component {
   }
 
   addOffer(data, imagePath) {
-    if(imagePath) {
+    if (imagePath) {
       data.image = imagePath;
     }
 
