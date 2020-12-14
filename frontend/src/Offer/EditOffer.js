@@ -62,7 +62,7 @@ export class EditOffer extends React.Component {
     return offersService.updateOffer(data, this.props.match.params.id);
   }
 
-  async uploadImage(image) {
+  uploadImage(image) {
     if (image && image.url) {
       return Promise.resolve(image.url.substr(image.url.indexOf('photo/') + 6));
     }

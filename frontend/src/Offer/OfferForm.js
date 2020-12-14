@@ -210,7 +210,6 @@ export class OfferForm extends React.Component {
                 rules={[
                   {
                     pattern: /^\d+?$/,
-                    required: true,
                     message: 'Please input price!'
                   }
                 ]}

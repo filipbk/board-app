@@ -62,11 +62,7 @@ export class Offer extends React.Component {
     }
 
     if (offerData && !offerData.id) {
-      notification.error({
-        message: 'Error',
-        description: 'The requested offer does not exist'
-      });
-      return <Redirect to='/' />;
+      return <Redirect to='/notfound' />;
     }
 
     return (
