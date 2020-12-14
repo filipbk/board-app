@@ -9,7 +9,7 @@ class OffersService {
     return fetch(fullURL, {
       method: 'GET',
       headers: authenticationHeader()
-    });
+    }).then(handleResponse);
   }
 
   getOffer(id) {
