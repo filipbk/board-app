@@ -19,6 +19,44 @@
   margin: auto 0;
 }
 
+h2.offer-form-title {
+  color: rgb(14, 80, 149);
+  text-align: center;
+  margin: 10px 0;
+}
+h1.offer-title {
+  color: rgb(14, 80, 149);
+  margin: 10px 0;
+}
+
+.offer-info {
+  font-size: 16px;
+}
+
+.btns-container {
+  margin-top: 20px;
+}
+
+.edit-offer-link {
+  display: block;
+  text-align: center;
+  background-color: #1890ff;
+  text-decoration: none;
+  color: #fff;
+  height: 32px;
+  font-size: 14px;
+  padding: 4px 15px;
+  border-radius: 2px;
+}
+
+.delete-offer {
+  width: 100%;
+}
+
+.offer-photo {
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   .form-wrapper {
     width: 95%;

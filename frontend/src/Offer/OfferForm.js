@@ -23,7 +23,7 @@ export class OfferForm extends React.Component {
       description: props.data && props.data.description,
       city: props.data && props.data.city,
       money: props.data && props.data.money,
-      categoryId: props.data && props.data.categoryId,
+      categoryId: props.data && props.data.category.id,
       editMode: props.editMode,
       fileList: props.data && props.data.fileList ? props.data.fileList : [],
       categories: []
@@ -124,7 +124,7 @@ export class OfferForm extends React.Component {
 
     return (
       <>
-        <Typography.Title level={2} className='dashboard-title'>
+        <Typography.Title level={2} className='offer-form-title'>
           {editMode ? 'Edit offer' : 'Create new offer'}
         </Typography.Title>
         <Row>

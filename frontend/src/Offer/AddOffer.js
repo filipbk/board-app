@@ -2,6 +2,7 @@ import React from 'react';
 import {OfferForm} from './OfferForm';
 import {offersService} from '../services';
 import {notification} from 'antd';
+import {history} from '../util';
 
 export class AddOffer extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export class AddOffer extends React.Component {
 
   addOffer(data, imagePath) {
     data.image = imagePath;
-    offersService.addOffer(data);
+    return offersService.addOffer(data);
   }
 
   async uploadImage(image) {
@@ -32,12 +33,12 @@ export class AddOffer extends React.Component {
     }
   }
 
-  showSuccessMessage(res) {
-    console.log(res);
+  showSuccessMessage(result) {
     notification.success({
       message: 'Success',
       description: 'New offer created successfully'
     });
+    history.push(`/offer/${result.id}`);
   }
 
   showErrorMessage(error) {

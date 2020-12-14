@@ -4,6 +4,7 @@ import {Layout} from 'antd';
 import './Dashboard.css';
 import {authenticationService, categoriesService} from '../services';
 import {history} from '../util';
+import {Link} from 'react-router-dom';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -53,13 +54,15 @@ export class Dashboard extends React.Component {
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item, key) => (
         <Col key={key}>
-          <Card
-            className='announcement-card'
-            hoverable
-            cover={<img alt='example' src={item.imageUrl} />}
-          >
-            <Meta title={item.name} />
-          </Card>
+          <Link to='/'>
+            <Card
+              className='announcement-card'
+              hoverable
+              cover={<img alt='example' src={item.imageUrl} />}
+            >
+              <Meta title={item.name} />
+            </Card>
+          </Link>
         </Col>
       ));
   }
@@ -83,6 +86,11 @@ export class Dashboard extends React.Component {
             </Row>
           )}
         </Layout>
+        {authenticationService.currentUserValue() ? (
+          <Link to='/offer/add' className='add-offer-link'>
+            Add new offer
+          </Link>
+        ) : null}
       </>
     );
   }

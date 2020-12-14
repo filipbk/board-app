@@ -28,6 +28,7 @@ export class EditOffer extends React.Component {
       .then((result) => {
         this.checkUserPermissions(result.author.id);
         const url = process.env.REACT_APP_API_URL;
+
         result.fileList = result.image
           ? [{url: `${url}/offers/photo/${result.image}`, uid: '-1'}]
           : [];
@@ -44,7 +45,8 @@ export class EditOffer extends React.Component {
 
   checkUserPermissions(authorId) {
     if (authorId !== authenticationService.currentUserValue().id) {
-      history.goBack();
+      this.showErrorMessage("You can't edit requested offer");
+      history.push('/');
     }
   }
 
@@ -57,7 +59,7 @@ export class EditOffer extends React.Component {
 
   updateOffer(data, imagePath) {
     data.image = imagePath;
-    offersService.updateOffer(data, this.props.match.params.id);
+    return offersService.updateOffer(data, this.props.match.params.id);
   }
 
   async uploadImage(image) {
@@ -73,12 +75,12 @@ export class EditOffer extends React.Component {
     }
   }
 
-  showSuccessMessage(res) {
-    console.log(res);
+  showSuccessMessage(result) {
     notification.success({
       message: 'Success',
-      description: 'New offer created successfully'
+      description: 'Offer edited successfully'
     });
+    history.push(`/offer/${result.id}`);
   }
 
   showErrorMessage(error) {

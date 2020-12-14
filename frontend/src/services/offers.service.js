@@ -31,6 +31,15 @@ class OffersService {
     }).then(handleResponse);
   }
 
+  deleteOffer(id) {
+    const url = process.env.REACT_APP_API_URL;
+
+    return fetch(`${url}/offers/${id}`, {
+      method: 'DELETE',
+      headers: authenticationHeader()
+    }).then(handleResponse);
+  }
+
   uploadPhoto(formData) {
     const url = process.env.REACT_APP_API_URL;
 
