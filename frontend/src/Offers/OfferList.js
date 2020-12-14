@@ -132,6 +132,7 @@ export function OfferList(props) {
   };
 
   const onCategoryChange = (newCategory) => {
+    setPage(FIRST_PAGE);
     if (newCategory) {
       setFilters({...filters, category: newCategory});
     } else {
@@ -140,7 +141,7 @@ export function OfferList(props) {
   };
 
   const getCategoryIdByName = (categoryName) =>
-    categories.find((category) => category.name === categoryName).id;
+    (categories.find((category) => category.name === categoryName) || {}).id;
 
   const onSearch = (value) => setFilters({...filters, query: value});
 
@@ -151,6 +152,10 @@ export function OfferList(props) {
     getCategories();
     updatePath();
   }, [page, pageSize, filters, updatePath]);
+
+  useEffect(() => {
+    getOffers(page, pageSize, filters);
+  }, [categories]);
 
   return (
     <div>
