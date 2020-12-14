@@ -72,8 +72,7 @@ export class Offer extends React.Component {
         </Typography.Title>
         <Row gutter={4}>
           <Col span={12} className='offer-info'>
-            {authenticationService.currentUserValue().id ===
-            offerData.author.id ? (
+            {authenticationService.currentUserValue().id === offerData.author.id ? (
               <Row gutter={4} className='btns-container'>
                 <Col span={12}>
                   <Link
@@ -85,7 +84,10 @@ export class Offer extends React.Component {
                 </Col>
                 <Col span={12}>
                   <Button
-                    onClick={() => this.deleteOffer()}
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this offer?'))
+                        this.deleteOffer();
+                    }}
                     className='delete-offer'
                     danger
                     type='primary'
@@ -96,13 +98,13 @@ export class Offer extends React.Component {
               </Row>
             ) : null}
             <Typography.Text strong={true}>Category:</Typography.Text>{' '}
-            <Typography.Text>{offerData.category.name}</Typography.Text>
+            <Typography.Text id='categoryName'>{offerData.category.name}</Typography.Text>
             <br />
             <Typography.Text strong={true}>City:</Typography.Text>{' '}
             <Typography.Text>{offerData.city}</Typography.Text>
             <br />
             <Typography.Text strong={true}>Price:</Typography.Text>{' '}
-            <Typography.Text>{offerData.money}</Typography.Text>
+            <Typography.Text>{`${offerData.money.toFixed(2)} zł`}</Typography.Text>
             <br />
             <Typography.Text strong={true}>Description:</Typography.Text>{' '}
             <Typography.Text>{offerData.description}</Typography.Text>
@@ -110,10 +112,7 @@ export class Offer extends React.Component {
           </Col>
           <Col span={12}>
             {offerData.image ? (
-              <img
-                className='offer-photo'
-                src={`${url}/offers/photo/${offerData.image}`}
-              />
+              <img className='offer-photo' src={`${url}/offers/photo/${offerData.image}`} />
             ) : null}
           </Col>
         </Row>

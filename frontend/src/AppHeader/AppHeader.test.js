@@ -16,9 +16,7 @@ describe('AppHeader', () => {
   it('renders app header for logged in user', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
-      .mockImplementation(() =>
-        new BehaviorSubject({firstName: 'Bob'}).asObservable()
-      );
+      .mockImplementation(() => new BehaviorSubject({firstName: 'Bob'}).asObservable());
     const appHeader = shallow(<AppHeader />);
 
     expect(appHeader.find(Button).at(0).text()).toEqual('Logout');
@@ -38,9 +36,7 @@ describe('AppHeader', () => {
   it('log user out properly', () => {
     const spy = jest
       .spyOn(authenticationService, 'currentUser')
-      .mockImplementation(() =>
-        new BehaviorSubject({firstName: 'Bob'}).asObservable()
-      );
+      .mockImplementation(() => new BehaviorSubject({firstName: 'Bob'}).asObservable());
     const appHeader = shallow(<AppHeader />);
     const logoutSpy = jest.spyOn(authenticationService, 'logout');
 

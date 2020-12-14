@@ -97,8 +97,6 @@ export class EditOffer extends React.Component {
       return <Spin className='loader' size='large' />;
     }
 
-    return (
-      <OfferForm editMode={true} onSubmit={this.onSubmit} data={offerData} />
-    );
+    return <OfferForm editMode={true} onSubmit={this.onSubmit} data={offerData} />;
   }
 }

@@ -13,9 +13,7 @@ describe('LoginFailure', () => {
   it('renders dashboard page with title and subtitle', () => {
     const dashboard = mount(<Dashboard />);
 
-    expect(dashboard.find(Typography).at(0).text()).toEqual(
-      'Welcome to the announcement service!'
-    );
+    expect(dashboard.find(Typography).at(0).text()).toEqual('Welcome to the announcement service!');
     expect(dashboard.find(Typography).at(1).text()).toEqual('Categories:');
   });
 

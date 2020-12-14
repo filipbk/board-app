@@ -15,9 +15,7 @@ export class AppHeader extends React.Component {
   }
 
   componentDidMount() {
-    authenticationService
-      .currentUser()
-      .subscribe((currentUser) => this.setState({currentUser}));
+    authenticationService.currentUser().subscribe((currentUser) => this.setState({currentUser}));
   }
 
   logout() {
@@ -33,11 +31,7 @@ export class AppHeader extends React.Component {
   getLoggedInUserNavbar() {
     return [
       <Menu.Item key='/logout'>
-        <Button
-          type='link'
-          onClick={() => this.logout()}
-          className='logout-btn'
-        >
+        <Button type='link' onClick={() => this.logout()} className='logout-btn'>
           Logout
         </Button>
       </Menu.Item>
@@ -47,11 +41,7 @@ export class AppHeader extends React.Component {
   getNotLoggedInUserNavbar() {
     return [
       <Menu.Item key='/auth/google'>
-        <Button
-          type='link'
-          onClick={this.redirectToGoogleAuth}
-          className='login-btn'
-        >
+        <Button type='link' onClick={this.redirectToGoogleAuth} className='login-btn'>
           Log in with Google
         </Button>
       </Menu.Item>
@@ -73,11 +63,11 @@ export class AppHeader extends React.Component {
         <div className='app-title'>
           <Link to='/'>Board App</Link>
         </div>
-        <Menu
-          className='app-menu'
-          mode='horizontal'
-          selectedKeys={[history.location.pathname]}
-        >
+        <Menu className='app-menu' mode='horizontal' selectedKeys={[history.location.pathname]}>
+          <Menu.Item key='offers'>
+            Offers
+            <Link to='/offers' />
+          </Menu.Item>
           {menuItems}
         </Menu>
       </Layout.Header>

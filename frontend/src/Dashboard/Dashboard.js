@@ -1,10 +1,10 @@
 import React from 'react';
 import {Card, Col, notification, Row, Spin, Typography} from 'antd';
 import {Layout} from 'antd';
+import {Link} from 'react-router-dom';
 import './Dashboard.css';
 import {authenticationService, categoriesService} from '../services';
 import {history} from '../util';
-import {Link} from 'react-router-dom';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -53,12 +53,13 @@ export class Dashboard extends React.Component {
     return categories
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item, key) => (
-        <Col key={key}>
-          <Link to='/'>
+        <Col key={key} span={3}>
+          <Link to={`/offers?cat=${item.name}`}>
             <Card
               className='announcement-card'
               hoverable
               cover={<img alt='example' src={item.imageUrl} />}
+              style={{textAlign: 'center'}}
             >
               <Meta title={item.name} />
             </Card>
@@ -81,7 +82,7 @@ export class Dashboard extends React.Component {
           {isLoading ? (
             <Spin size='large' />
           ) : (
-            <Row gutter={[16, 16]} justify='space-around'>
+            <Row gutter={[16, 16]} justify='space-between'>
               {announcementsCards}
             </Row>
           )}

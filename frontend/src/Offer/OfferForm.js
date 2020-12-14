@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  notification,
-  Row,
-  Select,
-  Typography,
-  Upload
-} from 'antd';
+import {Button, Col, Form, Input, notification, Row, Select, Typography, Upload} from 'antd';
 import './OfferForm.css';
 import {categoriesService} from '../services';
 
@@ -94,10 +84,7 @@ export class OfferForm extends React.Component {
     const {categories} = this.state;
 
     return (
-      <Select
-        onChange={(value) => this.setState({categoryId: value})}
-        id='categoryId'
-      >
+      <Select onChange={(value) => this.setState({categoryId: value})} id='categoryId'>
         {categories.map((category) => (
           <Select.Option key={category.id} value={category.id}>
             {category.name}
@@ -108,15 +95,7 @@ export class OfferForm extends React.Component {
   }
 
   render() {
-    const {
-      fileList,
-      editMode,
-      title,
-      city,
-      money,
-      description,
-      categoryId
-    } = this.state;
+    const {fileList, editMode, title, city, money, description, categoryId} = this.state;
     const layout = {
       labelCol: {span: 6},
       wrapperCol: {span: 18}
@@ -152,10 +131,7 @@ export class OfferForm extends React.Component {
                   }
                 ]}
               >
-                <Input
-                  id='title'
-                  onChange={(e) => this.setState({title: e.target.value})}
-                />
+                <Input id='title' onChange={(e) => this.setState({title: e.target.value})} />
               </Form.Item>
 
               <Form.Item
@@ -198,10 +174,7 @@ export class OfferForm extends React.Component {
                   }
                 ]}
               >
-                <Input
-                  id='city'
-                  onChange={(e) => this.setState({city: e.target.value})}
-                />
+                <Input id='city' onChange={(e) => this.setState({city: e.target.value})} />
               </Form.Item>
 
               <Form.Item
@@ -214,10 +187,7 @@ export class OfferForm extends React.Component {
                   }
                 ]}
               >
-                <Input
-                  id='money'
-                  onChange={(e) => this.setState({money: e.target.value})}
-                />
+                <Input id='money' onChange={(e) => this.setState({money: e.target.value})} />
               </Form.Item>
 
               <Form.Item name='photos' label='Photos'>
@@ -232,15 +202,8 @@ export class OfferForm extends React.Component {
                 </Upload>
               </Form.Item>
 
-              <Form.Item
-                className='btn-wrapper'
-                wrapperCol={{...layout.wrapperCol, offset: 8}}
-              >
-                <Button
-                  type='primary'
-                  htmlType='submit'
-                  className='form-button'
-                >
+              <Form.Item className='btn-wrapper' wrapperCol={{...layout.wrapperCol, offset: 8}}>
+                <Button type='primary' htmlType='submit' className='form-button'>
                   Submit
                 </Button>
               </Form.Item>
