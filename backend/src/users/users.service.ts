@@ -5,6 +5,7 @@ import { UserRepository } from './user.repository';
 import { Provider } from '../auth/provider';
 import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
+import { Offer } from '../offer/offer.entity';
 
 export class UsersService {
   constructor(
@@ -53,6 +54,15 @@ export class UsersService {
     await this.usersRepository.insert(user);
 
     return user;
+  }
+
+  async getOffersOfUser(userID: number): Promise<Offer[]> {
+    const user: User = (await User.findOne({
+      where: { id: userID },
+      relations: ['offers'],
+    })) as User;
+
+    return user.offers;
   }
 
   findOneByThirdPartyId(
