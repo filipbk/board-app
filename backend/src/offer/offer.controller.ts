@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import TokenUserData from '../auth/token-user-data';
 import { editFileName } from '../utils/edit-file-name.utils';
 import { imageFileFilter } from '../utils/image-file-filter.utils';
-import { OfferDto } from './offer.dto';
+import { OfferDto } from './dto/offer.dto';
 import { OfferService } from './offer.service';
 
 @Controller('offers')

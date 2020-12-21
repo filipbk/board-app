@@ -9,7 +9,7 @@ import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { CategoryService } from '../category/category.service';
 import { User } from '../users/user.entity';
-import { OfferDto } from './offer.dto';
+import { OfferDto } from './dto/offer.dto';
 import { Offer } from './offer.entity';
 import { OfferRepository } from './offer.repository';
 
@@ -100,6 +100,16 @@ export class OfferService {
     }
 
     return paginate<Offer>(queryBuilder, paginationOptions);
+  }
+
+  findById(
+    offerId: number,
+    relations: string[] = [],
+  ): Promise<Offer | undefined> {
+    return this.offerRepository.findOne({
+      where: { id: offerId },
+      relations: relations,
+    });
   }
 
   private static handleExceptions(
