@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { CategoryRepository } from './category.repository';
 
 @Injectable()
 export class CategoryService {
-  constructor(
-    @InjectRepository(Category)
-    private readonly categoryRepository: CategoryRepository,
-  ) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async getCategories(): Promise<Category[]> {
     return await this.categoryRepository.find();
@@ -26,5 +22,9 @@ export class CategoryService {
     await this.categoryRepository.insert(category);
 
     return category;
+  }
+
+  findById(categoryId: number): Promise<Category | undefined> {
+    return this.categoryRepository.findOne({ id: categoryId });
   }
 }

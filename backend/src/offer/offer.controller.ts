@@ -1,4 +1,3 @@
-import { OfferService } from './offer.service';
 import {
   Body,
   Controller,
@@ -8,24 +7,25 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  Query,
 } from '@nestjs/common';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import TokenUserData from '../auth/token-user-data';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { OfferDto } from './offer.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import TokenUserData from '../auth/token-user-data';
 import { editFileName } from '../utils/edit-file-name.utils';
 import { imageFileFilter } from '../utils/image-file-filter.utils';
-import { diskStorage } from 'multer';
+import { OfferDto } from './offer.dto';
+import { OfferService } from './offer.service';
 
 @Controller('offers')
 export class OfferController {
-  constructor(private service: OfferService) {}
+  constructor(private readonly offerService: OfferService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -33,7 +33,7 @@ export class OfferController {
     @Body() offer: OfferDto,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.insertOffer(offer, currentUser);
+    return this.offerService.insertOffer(offer, currentUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -43,7 +43,7 @@ export class OfferController {
     @Body() offerDto: OfferDto,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.updateOffer(offerDto, id, currentUser);
+    return this.offerService.updateOffer(offerDto, id, currentUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -52,7 +52,7 @@ export class OfferController {
     @Param('id') id: number,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.deleteOfferById(id, currentUser);
+    return this.offerService.deleteOfferById(id, currentUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -80,7 +80,7 @@ export class OfferController {
 
   @Get(':id')
   getOffer(@Param('id') id: number) {
-    return this.service.getOffer(id);
+    return this.offerService.getOffer(id);
   }
 
   @Get()
@@ -90,7 +90,7 @@ export class OfferController {
     @Query('query') query: string,
     @Query('categoryId') categoryId: number,
   ) {
-    return this.service.findAll(
+    return this.offerService.findAll(
       {
         page,
         limit,

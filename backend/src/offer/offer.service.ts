@@ -1,21 +1,22 @@
-import { Offer } from './offer.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like } from 'typeorm';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { OfferRepository } from './offer.repository';
+import { Like } from 'typeorm';
+import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
+import { CategoryService } from '../category/category.service';
 import { User } from '../users/user.entity';
 import { OfferDto } from './offer.dto';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { Category } from '../category/category.entity';
-import { CategoryRepository } from '../category/category.repository';
-import { Role } from '../auth/role';
+import { Offer } from './offer.entity';
+import { OfferRepository } from './offer.repository';
 
 export class OfferService {
   constructor(
-    @InjectRepository(Offer) private readonly offerRepository: OfferRepository,
-    @InjectRepository(Category)
-    private readonly categoryRepository: CategoryRepository,
+    private readonly offerRepository: OfferRepository,
+    private readonly categoryService: CategoryService,
   ) {}
 
   async insertOffer(
@@ -25,9 +26,13 @@ export class OfferService {
     offer.author = new User(currentUser);
     const newOffer = new Offer(offer);
 
-    newOffer.category = (await this.categoryRepository.findOne({
-      id: offer.categoryId,
-    })) as Category;
+    const category = await this.categoryService.findById(offer.categoryId);
+
+    if (!category) {
+      throw new BadRequestException('Category does not exist');
+    }
+
+    newOffer.category = category;
     newOffer.version = 1;
 
     return this.offerRepository.save(newOffer);
@@ -44,12 +49,16 @@ export class OfferService {
     })) as Offer;
     OfferService.handleExceptions(userOffer, currentUser);
 
+    const category = await this.categoryService.findById(offerDto.categoryId);
+
+    if (!category) {
+      throw new BadRequestException('Category does not exist');
+    }
+
     userOffer.city = offerDto.city;
     userOffer.description = offerDto.description;
     userOffer.title = offerDto.title;
-    userOffer.category = (await this.categoryRepository.findOne({
-      id: offerDto.categoryId,
-    })) as Category;
+    userOffer.category = category;
     userOffer.money = offerDto.money;
     userOffer.image = offerDto.image;
     userOffer.version = offerDto.version;
