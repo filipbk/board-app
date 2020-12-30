@@ -10,7 +10,6 @@ RUN npm ci --silent
 COPY . .
 RUN npm run build
 
-RUN rm -r node_modules
 RUN npm ci install --production --silent
 
 
