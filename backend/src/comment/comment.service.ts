@@ -2,14 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
 import { OfferService } from '../offer/offer.service';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { Comment } from './comment.entity';
 import { CommentRepository } from './comment.repository';
-import { CommentDiscussionDto } from './dto/comment-discussion.dto';
 import { CommentCreateDto } from './dto/comment.create.dto';
 
 @Injectable()
@@ -27,14 +28,13 @@ export class CommentService {
       throw new NotFoundException('Comments for given offer were not found');
     }
 
-    return this.commentRepository.getByOfferIdAndAuthorsAndRecipients(
+    return this.commentRepository.findByOfferIdAndAuthorAndRecipient(
       offer.id,
-      [offer.author.id, currentUser.id],
-      [offer.author.id, currentUser.id],
+      currentUser.id,
+      offer.author.id,
     );
   }
 
-  // TODO there must be a better way to do that + i believe that the logic itself is faulty as well (query conditions)
   async getAllCommentsByOfferId(offerId: number, currentUser: TokenUserData) {
     const offer = await this.offerService.findById(offerId, [
       'author',
@@ -42,35 +42,21 @@ export class CommentService {
     ]);
 
     if (!offer) {
-      throw new BadRequestException('Offer does not exist');
+      throw new NotFoundException('Offer does not exist');
     }
 
-    const comments = await this.commentRepository.find({
-      where: { offer: offerId },
-      relations: ['author', 'toWho'],
-    });
-
-    const authorIds: number[] = [];
-    for (let i = 0; i < comments.length; i++) {
-      if (
-        !authorIds.includes(comments[i].author.id) &&
-        offer.author.id !== comments[i].author.id
-      ) {
-        authorIds.push(comments[i].author.id);
-      }
+    if (
+      currentUser.role !== Role.ADMIN &&
+      offer?.author.id !== currentUser.id
+    ) {
+      throw new UnauthorizedException();
     }
 
-    const conversations: CommentDiscussionDto[] = [];
-    for (let i = 0; i < authorIds.length; i++) {
-      const comments = await this.commentRepository.getByOfferIdAndAuthorsAndRecipients(
-        offerId,
-        [authorIds[i], currentUser.id],
-        [authorIds[i], currentUser.id],
-      );
-      conversations.push({ comments: comments });
-    }
+    const comments = await this.commentRepository.findByOfferId(offer.id);
 
-    return conversations;
+    return this.buildConversations(comments).map(conversation => ({
+      comments: conversation,
+    }));
   }
 
   async createComment(
@@ -92,5 +78,18 @@ export class CommentService {
     })) as User;
 
     return this.commentRepository.save(newComment);
+  }
+
+  private buildConversations(comments: Comment[]): Comment[][] {
+    const conversations: Record<string, Comment[]> = {};
+
+    comments.forEach(comment => {
+      if (!conversations[comment.author.id]) {
+        conversations[comment.author.id] = [];
+      }
+      conversations[comment.author.id].push(comment);
+    });
+
+    return Object.values(conversations);
   }
 }

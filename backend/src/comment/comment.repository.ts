@@ -5,22 +5,31 @@ import { Comment } from './comment.entity';
 @Injectable()
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {
-  getByOfferIdAndAuthorsAndRecipients(
+  findByOfferIdAndAuthorAndRecipient(
     offerId: number,
-    authors: number[],
-    recipients: number[],
+    author: number,
+    recipient: number,
   ): Promise<Comment[]> {
-    return this.createQueryBuilder()
-      .leftJoinAndSelect('comment.author', 'author')
-      .leftJoinAndSelect('comment.toWho', 'toWho')
-      .where('comment.authorId IN (:authors)', {
-        authors: authors, // TODO are those where conditions okay?
-      })
-      .andWhere('comment.toWho IN (:toWhos)', {
-        toWhos: recipients,
-      })
-      .andWhere('comment.offerId = :offerId', { offerId: offerId })
-      .orderBy('comment.createdAt')
-      .getMany();
+    return this.find({
+      relations: ['author', 'toWho'],
+      where: {
+        author: author,
+        toWho: recipient,
+        offer: offerId,
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    });
+  }
+
+  findByOfferId(offerId: number): Promise<Comment[]> {
+    return this.find({
+      where: { offer: offerId },
+      relations: ['author', 'toWho'],
+      order: {
+        createdAt: 'ASC',
+      },
+    });
   }
 }

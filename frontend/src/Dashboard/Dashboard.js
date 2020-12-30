@@ -69,13 +69,12 @@ export class Dashboard extends React.Component {
 
   render() {
     const {isLoading} = this.state;
-    const announcementsCards = this.getCategoriesCards();
-    console.log({announcementsCards});
+    const categoryCards = this.getCategoriesCards();
 
     return (
       <>
         <Typography.Title level={2} className='dashboard-title'>
-          Welcome to the announcement service!
+          Welcome to the offer market!
         </Typography.Title>
         <Layout className='categories-container'>
           <Typography.Title level={4}>Categories:</Typography.Title>
@@ -84,7 +83,7 @@ export class Dashboard extends React.Component {
           ) : (
             <List
               grid={{gutter: 24, xs: 1, sm: 2, md: 4, lg: 4, xl: 8}}
-              dataSource={announcementsCards}
+              dataSource={categoryCards}
               style={{marginLeft: '5em', marginRight: '5em'}}
               renderItem={(category) => <List.Item>{category}</List.Item>}
             />
