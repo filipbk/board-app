@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   mysql:
@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: board
     ports:
-      - '3306:3306'
+      - "3306:3306"
     volumes:
       - db_volume:/var/lib/mysql
     networks:
@@ -33,9 +33,9 @@ services:
       - NODE_ENV=development
       - IGNORE_ENV_FILE=false
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
-      - ./backend:/app
+      - ./backend:/app:delegated
       - /app/node_modules
     networks:
       - app
@@ -49,9 +49,9 @@ services:
     environment:
       - NODE_ENV=development
     ports:
-      - '80:3001'
+      - "80:3001"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app:delegated
       - /app/node_modules
     stdin_open: true
 
