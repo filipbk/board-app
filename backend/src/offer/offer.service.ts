@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
@@ -13,6 +14,7 @@ import { OfferDto } from './dto/offer.dto';
 import { Offer } from './offer.entity';
 import { OfferRepository } from './offer.repository';
 
+@Injectable()
 export class OfferService {
   constructor(
     private readonly offerRepository: OfferRepository,
