@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { CommentModule } from './comment/comment.module';
+import { authConfigProvider } from './config/auth.config';
 import { configValidationSchema } from './config/config-validation.schema';
 import { DatabaseConfig, dbConfigProvider } from './config/database.config';
 import { OfferModule } from './offer/offer.module';
@@ -16,6 +17,11 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [dbConfigProvider, authConfigProvider],
+      validationSchema: configValidationSchema,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [dbConfigProvider.KEY],
@@ -32,11 +38,6 @@ import { UsersModule } from './users/users.module';
           synchronize: true,
         };
       },
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [dbConfigProvider],
-      validationSchema: configValidationSchema,
     }),
     UsersModule,
     AuthModule,

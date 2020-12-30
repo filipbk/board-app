@@ -15,7 +15,6 @@ describe('CommentController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CommentController],
       providers: [
-        CommentService,
         {
           provide: CommentService,
           useValue: commentServiceMock,

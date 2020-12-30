@@ -14,7 +14,7 @@ export const configValidationSchema = Joi.object({
   GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
   GOOGLE_OAUTH_SECRET: Joi.string().required(),
   JWT_SECRET_KEY: Joi.string().required(),
+  JWT_EXPIRATION_TIME: Joi.number().required(),
   DASHBOARD_URL: Joi.string().required(),
   API_URL: Joi.string().required(),
-  JWT_EXPIRATION_TIME: Joi.number().required(),
 });
