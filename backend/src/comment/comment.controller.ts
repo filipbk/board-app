@@ -2,8 +2,8 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import TokenUserData from '../auth/token-user-data';
-import { CommentCreateDto } from './dto/comment.create.dto';
 import { CommentService } from './comment.service';
+import { CommentCreateDto } from './dto/comment.create.dto';
 
 @Controller('comments')
 export class CommentController {

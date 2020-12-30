@@ -1,15 +1,11 @@
+import { IsNumber, IsOptional } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Base } from '../base-entity';
-import { IsNumber, IsOptional } from 'class-validator';
-import { User } from '../users/user.entity';
 import { Offer } from '../offer/offer.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Comment extends Base {
-  constructor() {
-    super();
-  }
-
   @PrimaryGeneratedColumn()
   @IsNumber()
   @IsOptional()
