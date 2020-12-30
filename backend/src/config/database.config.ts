@@ -1,8 +1,16 @@
 import { registerAs } from '@nestjs/config';
 
-export default registerAs(
+export interface DatabaseConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  databaseName: string;
+}
+
+export const dbConfigProvider = registerAs(
   'database',
-  (): DatabaseSettings => ({
+  (): DatabaseConfig => ({
     host: process.env.DATABASE_HOST as string,
     port: (process.env.DATABASE_PORT || 3306) as number,
     user: process.env.DATABASE_USERNAME as string,
