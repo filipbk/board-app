@@ -11,7 +11,7 @@ import { AppSettingsModule } from '../app-settings/app-settings.module';
     TypeOrmModule.forFeature([User, UserRepository]),
     forwardRef(() => AppSettingsModule),
   ],
-  exports: [TypeOrmModule, UsersService],
+  exports: [UsersService],
   providers: [UsersService],
   controllers: [UsersController],
 })

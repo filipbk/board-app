@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { CommentService } from './comment.service';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import TokenUserData from '../auth/token-user-data';
-import { CommentCreateDto } from './comment.create.dto';
+import { CommentService } from './comment.service';
+import { CommentCreateDto } from './dto/comment.create.dto';
 
 @Controller('comments')
 export class CommentController {
-  constructor(private service: CommentService) {}
+  constructor(private commentService: CommentService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get(':offerId')
@@ -15,7 +15,7 @@ export class CommentController {
     @Param('offerId') id: number,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.getCommentsByOfferId(id, currentUser);
+    return this.commentService.getCommentsByOfferId(id, currentUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -24,7 +24,7 @@ export class CommentController {
     @Param('offerId') id: number,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.getAllCommentsByOfferId(id, currentUser);
+    return this.commentService.getAllCommentsByOfferId(id, currentUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -33,6 +33,6 @@ export class CommentController {
     @Body() comment: CommentCreateDto,
     @CurrentUser() currentUser: TokenUserData,
   ) {
-    return this.service.createComment(comment, currentUser);
+    return this.commentService.createComment(comment, currentUser);
   }
 }

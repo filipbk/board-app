@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   mysql:
@@ -8,13 +8,14 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: board
     ports:
-      - '3306:3306'
+      - "3306:3306"
     volumes:
       - db_volume:/var/lib/mysql
     networks:
       - app
 
   api:
+    container_name: board-api-prod
     build:
       context: backend
       dockerfile: Dockerfile.prod
@@ -24,11 +25,12 @@ services:
       - NODE_ENV=production
       - IGNORE_ENV_FILE=false
     ports:
-      - '3000:3000'
+      - "3000:3000"
     networks:
       - app
 
   dashboard:
+    container_name: board-dashboard-prod
     build:
       context: frontend
       dockerfile: Dockerfile.prod
@@ -37,7 +39,7 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - '80:80'
+      - "80:80"
 
 volumes:
   db_volume:

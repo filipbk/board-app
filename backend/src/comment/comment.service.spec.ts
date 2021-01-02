@@ -1,8 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CommentService } from './comment.service';
-import { OfferRepository } from '../offer/offer.repository';
+import { OfferService } from '../offer/offer.service';
+import { UsersService } from '../users/users.service';
 import { CommentRepository } from './comment.repository';
-import { UserRepository } from '../users/user.repository';
+import { CommentService } from './comment.service';
+
+const commentRepositoryMock = {
+  getByOfferIdAndAuthorsAndRecipients: jest.fn(),
+  find: jest.fn(),
+  save: jest.fn(),
+};
+
+const userServiceMock = {
+  findOne: jest.fn(),
+};
+
+const offerServiceMock = {
+  findOne: jest.fn(),
+};
 
 describe('CommentService', () => {
   let service: CommentService;
@@ -11,9 +25,18 @@ describe('CommentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CommentService,
-        OfferRepository,
-        CommentRepository,
-        UserRepository,
+        {
+          provide: CommentRepository,
+          useValue: commentRepositoryMock,
+        },
+        {
+          provide: UsersService,
+          useValue: userServiceMock,
+        },
+        {
+          provide: OfferService,
+          useValue: offerServiceMock,
+        },
       ],
     }).compile();
 

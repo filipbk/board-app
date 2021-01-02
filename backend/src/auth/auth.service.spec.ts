@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
-import { ConfigService } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AppSettingsService } from '../app-settings/app-settings.service';
+import { authConfigMock } from '../../test/mocks/auth.config.mock';
 import { AppSettings } from '../app-settings/app-settings.entity';
+import { AppSettingsService } from '../app-settings/app-settings.service';
+import { authConfigProvider } from '../config/auth.config';
+import { UsersService } from '../users/users.service';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -13,7 +14,10 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        ConfigService,
+        {
+          provide: authConfigProvider.KEY,
+          useValue: authConfigMock,
+        },
         {
           provide: UsersService,
           useFactory: jest.fn(),
