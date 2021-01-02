@@ -1,10 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
+import { OfferDto } from './dto/offer.dto';
 import { Offer } from './offer.entity';
-import { OfferDto } from './offer.dto';
 
+@Injectable()
 @EntityRepository(Offer)
 export class OfferRepository extends Repository<Offer> {
-  createOffer = async (createOfferDto: OfferDto) => {
+  async createOffer(createOfferDto: OfferDto): Promise<Offer> {
     return await this.save(createOfferDto);
-  };
+  }
 }

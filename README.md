@@ -125,21 +125,25 @@ npm run start:dev
 2. Save the token.
 3. Visit the dashboard on `localhost` and log in.
 4. Send a POST request to `${API_URL}/auth/token/admin` endpoint with the following json body:
-```json
-{
-    "token": "$ADMIN_TOKEN",
-    "email": "$USER_EMAIL"
-}
-```
-replacing variables with proper values.
 
-Example:
-```bash
-curl --location --request POST 'localhost:3000/auth/token/admin' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "email": "your-email@gmail.com",
-    "token": "an-admin-token"
-}'
-```
-5. Login again to the dashboard and Your account now has admin privileges
+    ```json
+    {
+        "token": "$ADMIN_TOKEN",
+        "email": "$USER_EMAIL"
+    }
+    ```
+
+    replacing variables with proper values.
+
+    Example:
+
+    ```bash
+    curl --location --request POST 'localhost:3000/auth/token/admin' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "email": "your-email@gmail.com",
+        "token": "an-admin-token"
+    }'
+    ```
+
+5. Login again to the dashboard and Your account now has admin privileges.

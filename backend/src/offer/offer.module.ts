@@ -1,22 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OfferRepository } from './offer.repository';
-import { Offer } from './offer.entity';
-import { OfferService } from './offer.service';
+import { CategoryModule } from '../category/category.module';
 import { OfferController } from './offer.controller';
-import { Category } from '../category/category.entity';
-import { CategoryRepository } from '../category/category.repository';
+import { Offer } from './offer.entity';
+import { OfferRepository } from './offer.repository';
+import { OfferService } from './offer.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Offer,
-      OfferRepository,
-      Category,
-      CategoryRepository,
-    ]),
-  ],
-  exports: [TypeOrmModule, OfferService],
+  imports: [TypeOrmModule.forFeature([Offer, OfferRepository]), CategoryModule],
+  exports: [OfferService],
   providers: [OfferService],
   controllers: [OfferController],
 })

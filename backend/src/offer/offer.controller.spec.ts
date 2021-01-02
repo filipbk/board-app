@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OfferController } from './offer.controller';
 import { OfferService } from './offer.service';
-import { OfferRepository } from './offer.repository';
-import { CategoryRepository } from '../category/category.repository';
+
+const offerServiceMock = {};
 
 describe('Offer Controller', () => {
   let controller: OfferController;
@@ -10,7 +10,12 @@ describe('Offer Controller', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OfferController],
-      providers: [OfferService, OfferRepository, CategoryRepository],
+      providers: [
+        {
+          provide: OfferService,
+          useValue: offerServiceMock,
+        },
+      ],
     }).compile();
 
     controller = module.get<OfferController>(OfferController);

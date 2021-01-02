@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable } from '@nestjs/common';
 import { sign } from 'jsonwebtoken';
+import { AuthConfig, authConfigProvider } from '../config/auth.config';
+import { UsersService } from '../users/users.service';
 import { Provider } from './provider';
 import { Role } from './role';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -12,10 +12,11 @@ export class AuthService {
 
   constructor(
     private readonly userService: UsersService,
-    private readonly configService: ConfigService,
+    @Inject(authConfigProvider.KEY)
+    private readonly authConfig: AuthConfig,
   ) {
-    this.jwtSecret = this.configService.get('JWT_SECRET_KEY')!;
-    this.jwtExpirationTime = this.configService.get('JWT_EXPIRATION_TIME')!;
+    this.jwtSecret = this.authConfig.jwtSecret;
+    this.jwtExpirationTime = this.authConfig.jwtExpirationTime;
   }
 
   async loginWithOauth(

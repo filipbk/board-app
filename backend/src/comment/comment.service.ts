@@ -1,128 +1,95 @@
-import { getManager } from 'typeorm';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Role } from '../auth/role';
 import TokenUserData from '../auth/token-user-data';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Comment } from './comment.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Offer } from '../offer/offer.entity';
-import { OfferRepository } from '../offer/offer.repository';
-import { CommentDiscussionDto } from './comment.discussion.dto';
-import { CommentRepository } from './comment.repository';
+import { OfferService } from '../offer/offer.service';
 import { User } from '../users/user.entity';
-import { CommentCreateDto } from './comment.create.dto';
-import { UserRepository } from '../users/user.repository';
+import { UsersService } from '../users/users.service';
+import { Comment } from './comment.entity';
+import { CommentRepository } from './comment.repository';
+import { CommentCreateDto } from './dto/comment.create.dto';
 
 @Injectable()
 export class CommentService {
   constructor(
-    @InjectRepository(Offer) private readonly offerRepository: OfferRepository,
-    @InjectRepository(Comment)
+    private readonly offerService: OfferService,
+    private readonly userService: UsersService,
     private readonly commentRepository: CommentRepository,
-    @InjectRepository(User) private readonly userRepository: UserRepository,
   ) {}
 
   async getCommentsByOfferId(offerId: number, currentUser: TokenUserData) {
-    return this.getCommentsByOfferIdAndCurrentUserId(offerId, currentUser.id);
+    const offer = await this.offerService.findById(offerId, ['author']);
+
+    if (!offer) {
+      throw new NotFoundException('Comments for given offer were not found');
+    }
+
+    return this.commentRepository.findByOfferIdAndAuthorAndRecipient(
+      offer.id,
+      currentUser.id,
+      offer.author.id,
+    );
   }
 
   async getAllCommentsByOfferId(offerId: number, currentUser: TokenUserData) {
-    const offer = (await this.offerRepository.findOne({
-      where: { id: offerId },
-      relations: ['author', 'comments'],
-    })) as Offer;
-    const comments = (await this.commentRepository.find({
-      where: { offer: offerId },
-      relations: ['author', 'toWho'],
-    })) as Comment[];
+    const offer = await this.offerService.findById(offerId, [
+      'author',
+      'comments',
+    ]);
 
-    const authorIds: number[] = [];
-    for (let i = 0; i < comments.length; i++) {
-      if (
-        !authorIds.includes(comments[i].author.id) &&
-        offer.author.id !== comments[i].author.id
-      ) {
-        authorIds.push(comments[i].author.id);
-      }
+    if (!offer) {
+      throw new NotFoundException('Offer does not exist');
     }
 
-    const conversations: CommentDiscussionDto[] = [];
-    for (let i = 0; i < authorIds.length; i++) {
-      const coms = (await this.getCommentsByAuthorsAndOffer(
-        offerId,
-        currentUser.id,
-        authorIds[i],
-      )) as Comment[];
-      conversations.push({ comments: coms });
+    if (
+      currentUser.role !== Role.ADMIN &&
+      offer?.author.id !== currentUser.id
+    ) {
+      throw new UnauthorizedException();
     }
 
-    return conversations;
+    const comments = await this.commentRepository.findByOfferId(offer.id);
+
+    return this.buildConversations(comments).map(conversation => ({
+      comments: conversation,
+    }));
   }
 
   async createComment(
     commentDto: CommentCreateDto,
     currentUser: TokenUserData,
   ) {
+    const offer = await this.offerService.findById(commentDto.offerId);
+
+    if (!offer) {
+      throw new BadRequestException('Offer does not exist');
+    }
+
     const newComment = new Comment();
     newComment.content = commentDto.content;
-    newComment.offer = (await this.offerRepository.findOne({
-      where: { id: commentDto.offerId },
-    })) as Offer;
+    newComment.offer = offer;
     newComment.author = new User(currentUser);
-    newComment.toWho = (await this.userRepository.findOne({
+    newComment.toWho = (await this.userService.findOne({
       where: { id: commentDto.toWhoId },
     })) as User;
 
     return this.commentRepository.save(newComment);
   }
 
-  private async getCommentsByOfferIdAndCurrentUserId(
-    offerId: number,
-    currentUserId: number,
-  ) {
-    const manager = getManager();
+  private buildConversations(comments: Comment[]): Comment[][] {
+    const conversations: Record<string, Comment[]> = {};
 
-    const offer = (await this.offerRepository.findOne({
-      where: { id: offerId },
-      relations: ['author'],
-    })) as Offer;
+    comments.forEach(comment => {
+      if (!conversations[comment.author.id]) {
+        conversations[comment.author.id] = [];
+      }
+      conversations[comment.author.id].push(comment);
+    });
 
-    if (!offer) {
-      throw new NotFoundException('No data');
-    }
-
-    return manager
-      .createQueryBuilder(Comment, 'comment')
-      .leftJoinAndSelect('comment.author', 'author')
-      .leftJoinAndSelect('comment.toWho', 'toWho')
-      .where('comment.authorId IN (:authors)', {
-        authors: [offer.author.id, currentUserId],
-      })
-      .andWhere('comment.toWho IN (:toWhos)', {
-        toWhos: [offer.author.id, currentUserId],
-      })
-      .andWhere('comment.offerId = :offerId', { offerId: offerId })
-      .orderBy('comment.createdAt')
-      .getMany();
-  }
-
-  private async getCommentsByAuthorsAndOffer(
-    offerId: number,
-    currentUserId: number,
-    anotherCommentAuthorId: number,
-  ) {
-    const manager = getManager();
-
-    return manager
-      .createQueryBuilder(Comment, 'comment')
-      .leftJoinAndSelect('comment.author', 'author')
-      .leftJoinAndSelect('comment.toWho', 'toWho')
-      .where('comment.authorId IN (:authors)', {
-        authors: [anotherCommentAuthorId, currentUserId],
-      })
-      .andWhere('comment.toWho IN (:toWhos)', {
-        toWhos: [anotherCommentAuthorId, currentUserId],
-      })
-      .andWhere('comment.offerId = :offerId', { offerId: offerId })
-      .orderBy('comment.createdAt')
-      .getMany();
+    return Object.values(conversations);
   }
 }

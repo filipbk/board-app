@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { User } from '../users/user.entity';
+import { User } from '../../users/user.entity';
 
 export class OfferDto {
   @IsString()
